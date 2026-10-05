@@ -43,16 +43,18 @@ def run():
     print("  " + "-" * 80)
     for a in answers:
         q = a["question_id"]
-        atype = a["answer_type"]
-        conf = a["confidence"]
-        n_claims = len(a["claims"])
+        atype = a.get("answer_type", a.get("status", "unknown"))
+        conf = a.get("confidence", "unknown")
+        if isinstance(conf, dict):
+            conf = conf.get("overall", "unknown")
+        n_claims = len(a.get("claims", a.get("claims_used", [])))
         q_short = EVALUATION_QUESTIONS[q][:50]
         print(f"  {q:>3}  {atype:<20} {conf:<8} {n_claims:>6}  {q_short}")
 
     # Counts
     type_counts = {}
     for a in answers:
-        t = a["answer_type"]
+        t = a.get("answer_type", a.get("status", "unknown"))
         type_counts[t] = type_counts.get(t, 0) + 1
     print(f"\n  Answer type breakdown: {type_counts}")
     print(f"  Answered      : {type_counts.get('answered', 0)}/23")

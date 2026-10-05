@@ -128,6 +128,26 @@ def search(query: str, kb, version_hint: str = None) -> dict:
             elif any(subj.lower() in e.lower() or e.lower() in subj.lower()
                      for e in entities):
                 score += W_ENTITY // 2
+            elif predicates and claim["predicate"] in predicates and any(e.lower() in claim.get("value", "").lower() for e in entities):
+                score += 5
+
+            # Document source match: if query specifies a document, boost claims from that document
+            doc_source_map = {
+                "AEG-OM-700": "manuals/operator_manual.pdf",
+                "AEG-MM-700": "manuals/maintenance_manual.pdf",
+                "AEG-AL-700": "reference/alarm_reference.pdf",
+                "AEG-CR-700": "reference/component_register.xlsx",
+                "AEG-GL-700": "reference/terminology_glossary.docx",
+                "AEG-DWG-H01": "diagrams/system_diagram_hydraulic.pdf",
+                "AEG-DWG-E02": "diagrams/system_diagram_electrical.png",
+                "AEG-DWG-W03": "diagrams/wiring_diagram.pdf",
+            }
+            for e in entities:
+                if e in doc_source_map:
+                    doc_src = doc_source_map[e]
+                    claim_sources = [ev.get("source_file", "") for ev in claim.get("evidence", [])]
+                    if doc_src in claim_sources:
+                        score += 8
 
         # Predicate match
         if predicates and claim["predicate"] in predicates:

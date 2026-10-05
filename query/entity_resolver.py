@@ -125,7 +125,7 @@ PREDICATE_KEYWORDS = {
         "purpose of", "terminal block", "relay",
     ],
     "startup_interlock_condition": [
-        "before start", "prior to start", "must be true", "startup condition",
+        "startup", "start up", "before start", "prior to start", "must be true", "startup condition",
         "interlock", "start the", "starting the", "prerequisite",
         "what must", "requirements before", "before starting", "before you can",
     ],
@@ -251,6 +251,8 @@ def recognize_predicates(norm_query: str) -> list:
                 if pred not in found:
                     found.append(pred)
                 break
+    if len(found) > 1 and "component_description" in found:
+        found = [p for p in found if p != "component_description"]
     return found
 
 

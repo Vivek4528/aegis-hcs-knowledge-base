@@ -1,0 +1,268 @@
+{
+  "source_file": "noise/safety_data_sheet_hydraulic_fluid.pdf",
+  "file_format": "pdf",
+  "trust_tier": 7,
+  "trust_label": "noise",
+  "content_blocks": [
+    {
+      "text": "Safety Data Sheet \u2014 HydroFluid-32 HF32-SDS-06 Safety Data Sheet Aegis HydroFluid-32 Hydraulic Fluid SDS Number: HF32-SDS-06 | Revision Date: 2025-02-11",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "1. Identification",
+      "block_type": "heading",
+      "page": 1,
+      "section": "1 Identification",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Product Name: Aegis HydroFluid-32. Recommended Use: hydraulic fluid for Aegis Series-7 Hydraulic Power Units and compatible industrial hydraulic systems. Not for use as a brake fluid or in food-grade applications.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "1 Identification",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "2. Hazard Identification",
+      "block_type": "heading",
+      "page": 1,
+      "section": "2 Hazard Identification",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Classification: Not classified as hazardous under GHS for acute toxicity. May cause mild skin irritation with prolonged contact. Slip hazard if spilled on hard flooring.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "2 Hazard Identification",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "3. Composition / Information on Ingredients",
+      "block_type": "heading",
+      "page": 1,
+      "section": "3 Composition / Information on Ingredients",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Base oil (petroleum, highly refined), 80-95%. Proprietary anti-wear and anti-oxidant additive package, 5-15%. Exact composition withheld as a trade secret.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "3 Composition / Information on Ingredients",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "4. First-Aid Measures",
+      "block_type": "heading",
+      "page": 1,
+      "section": "4 First-Aid Measures",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Skin contact: wash with soap and water. Eye contact: flush with water for 15 minutes. Ingestion: do not induce vomiting; seek medical attention.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "4 First-Aid Measures",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "5. Fire-Fighting Measures",
+      "block_type": "heading",
+      "page": 1,
+      "section": "5 Fire-Fighting Measures",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Suitable extinguishing media: CO2, dry chemical, foam. Flash point (Cleveland Open Cup): approximately 210\u00b0C.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "5 Fire-Fighting Measures",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "6. Accidental Release Measures",
+      "block_type": "heading",
+      "page": 1,
+      "section": "6 Accidental Release Measures",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Contain spill, absorb with inert material, dispose per local regulations. Avoid release to waterways.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "6 Accidental Release Measures",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "7. Handling and Storage",
+      "block_type": "heading",
+      "page": 1,
+      "section": "7 Handling and Storage",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Store in a cool, dry, well-ventilated area away from oxidizing agents. Keep container closed when not in use.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "7 Handling and Storage",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "8. Exposure Controls / Personal Protection",
+      "block_type": "heading",
+      "page": 1,
+      "section": "8 Exposure Controls / Personal Protection",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Use in well-ventilated areas. Nitrile gloves and safety glasses recommended for extended handling.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "8 Exposure Controls / Personal Protection",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "9. Physical and Chemical Properties",
+      "block_type": "heading",
+      "page": 1,
+      "section": "9 Physical and Chemical Properties",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Appearance: clear amber liquid. Viscosity: ISO VG 32. Pour point: -33\u00b0C. HF32-SDS-06 | Page 1",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "9 Physical and Chemical Properties",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Safety Data Sheet \u2014 HydroFluid-32 HF32-SDS-06",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "9 Physical and Chemical Properties",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "10. Stability and Reactivity",
+      "block_type": "heading",
+      "page": 2,
+      "section": "10 Stability and Reactivity",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Stable under normal conditions. Avoid contact with strong oxidizers.",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "10 Stability and Reactivity",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "11. Toxicological Information",
+      "block_type": "heading",
+      "page": 2,
+      "section": "11 Toxicological Information",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Low acute toxicity via oral, dermal, and inhalation routes based on component data.",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "11 Toxicological Information",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "15. Regulatory Information",
+      "block_type": "heading",
+      "page": 2,
+      "section": "15 Regulatory Information",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Not listed as a hazardous substance under applicable regional regulations at the time of publication.",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "15 Regulatory Information",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "16. Other Information",
+      "block_type": "heading",
+      "page": 2,
+      "section": "16 Other Information",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "This SDS covers the hydraulic fluid product only and does not describe the operation, maintenance, alarms, or electronic control behavior of any equipment the fluid is used in. Refer to the relevant equipment manufacturer's documentation for equipment operating procedures. HF32-SDS-06 | Page 2",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "16 Other Information",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "page_count": 2,
+    "pdf_info": {
+      "Author": "(anonymous)",
+      "CreationDate": "D:20260926165238+00'00'",
+      "Creator": "(unspecified)",
+      "Keywords": "",
+      "ModDate": "D:20260926165238+00'00'",
+      "Producer": "ReportLab PDF Library - (opensource)",
+      "Subject": "(unspecified)",
+      "Title": "(anonymous)",
+      "Trapped": "False"
+    },
+    "parse_time_seconds": 0.069,
+    "file_notes": "HydroFluid-32 MSDS, largely irrelevant to Q&A"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "text_extraction",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "pdfplumber parses PDF text objects directly from file structure; no OCR or ML. Deterministic: same input always gives same output."
+    },
+    {
+      "step_name": "text_normalization",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "Rule-based artifact replacement from NORMALIZATION_TABLE (\u00f9\u2192\u2014, fi\u2192\u2192, (cid:N)\u2192bullet). Deterministic mapping, no ML."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

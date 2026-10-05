@@ -1,0 +1,84 @@
+{
+  "source_file": "engineering_bulletins/ECN-1058.pdf",
+  "file_format": "pdf",
+  "trust_tier": 2,
+  "trust_label": "ecn_bulletin",
+  "content_blocks": [
+    {
+      "text": "Engineering Change Notice ECN-1058 Engineering Change Notice ECN-1058 ECN Number: ECN-1058 Title: Alarm A17 Threshold Reference Correction Effective: Immediately upon publication References: ECN-1042 Status: Released",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "1. Description of Change",
+      "block_type": "heading",
+      "page": 1,
+      "section": "1 Description of Change",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "The Alarm Reference (AEG-AL-700) description for Alarm A17 (Hydraulic Pressure Low) referenced the pre-ECN-1042 pressure sensor (PS-04) by name. This notice corrects that reference: Alarm A17's low-pressure condition is evaluated against whichever pressure sensor is active for the installed software revision (PS-04 prior to revision 3.2, PS-04A on revision 3.2 and later). The alarm's threshold logic itself is unchanged by this notice. This is a documentation correction only. No firmware or hardware change is required.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "1 Description of Change",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "2. Note",
+      "block_type": "heading",
+      "page": 1,
+      "section": "2 Note",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "This notice does not change the operating pressure setpoint established in ECN-1042. ECN-1058 | Page 1",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "2 Note",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "page_count": 1,
+    "pdf_info": {
+      "Author": "(anonymous)",
+      "CreationDate": "D:20260926165238+00'00'",
+      "Creator": "(unspecified)",
+      "Keywords": "",
+      "ModDate": "D:20260926165238+00'00'",
+      "Producer": "ReportLab PDF Library - (opensource)",
+      "Subject": "(unspecified)",
+      "Title": "(anonymous)",
+      "Trapped": "False"
+    },
+    "parse_time_seconds": 0.029,
+    "file_notes": "A17 text correction, clarifies/references ECN-1042 (NOT supersession)"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "text_extraction",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "pdfplumber parses PDF text objects directly from file structure; no OCR or ML. Deterministic: same input always gives same output."
+    },
+    {
+      "step_name": "text_normalization",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "Rule-based artifact replacement from NORMALIZATION_TABLE (\u00f9\u2192\u2014, fi\u2192\u2192, (cid:N)\u2192bullet). Deterministic mapping, no ML."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

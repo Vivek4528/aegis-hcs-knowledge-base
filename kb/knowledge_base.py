@@ -1,10 +1,10 @@
 """
 Knowledge Base — stores claims indexed for fast lookup.
-Loaded from gold_claims.py; written to output/knowledge_base.json.
+Loaded from curated_claims.py; written to output/knowledge_base.json.
 """
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from extract.gold_claims import CLAIMS, CONFLICTS, GAPS, get_claims_for_question
+from extract.curated_claims import CLAIMS, CONFLICTS, GAPS, get_claims_for_question
 
 
 class KnowledgeBase:

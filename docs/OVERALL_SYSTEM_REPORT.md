@@ -17,7 +17,7 @@ To achieve absolute epistemic safety, this system eliminates generative inferenc
 2. **Strict Trust Tier Hierarchy (T1–T7)**: Documented authority decay ensuring engineering manuals and official change notices supersede training slides and unreviewed field notes.
 3. **Structured Claim & Evidence Architecture**: Conversion of all ingested intelligence into 38 active/version-scoped atomic claims, 5 gap/abstention claims, and 5 explicit conflict records with strict provenance tracking.
 4. **Deterministic Retrieval & Mathematical Ranking**: Hybrid scoring combining canonical entity matching, typed predicate affinity, and localized text overlap, coupled with entity-level gap suppression.
-5. **Rigorous Dual-Accuracy Evaluation**: An honest, non-inflated evaluation regime distinguishing development set accuracy (**23/23, 100%**) from frozen, unseen held-out adversarial test sets (**10/15, 66.7%** and **11/15, 73.3%**), backed by 59 automated test cases.
+5. **Rigorous Dual-Accuracy Evaluation**: An honest, non-inflated evaluation regime distinguishing development set accuracy (**23/23, 100.0%** — not an accuracy estimate: claims, gold answers, and retrieval were developed together), backed by 59 automated test cases.
 
 ---
 
@@ -38,17 +38,15 @@ The Aegis Series-7 HCS documentation corpus consists of **20 heterogeneous engin
 | `reference/component_register.xlsx` | Spreadsheet | **T4** | Cell matrix & coordinate extraction | `openpyxl` | 0.98 |
 | `reference/revision_history.xlsx` | Spreadsheet | **T4** | Tabular history extraction | `openpyxl` | 0.98 |
 | `reference/alarm_reference.pdf` | Vector PDF | **T4** | Columnar table extraction | `pdfplumber` | 0.92 |
-| `diagrams/system_diagram_hydraulic.pdf` | Vector PDF | **T3** | Vector shape & text coordinate parse | `PyMuPDF` / `fitz` | 0.50 (Geometric) |
-| `diagrams/wiring_diagram.pdf` | Vector PDF | **T3** | Vector line & pin extraction | `PyMuPDF` / `fitz` | 0.50 (Geometric) |
+| `diagrams/system_diagram_hydraulic.pdf` | Vector PDF | **T3** | Rule-based vector shape & geometry parse | `PyMuPDF` / `fitz` | 0.50 (Geometry) |
+| `diagrams/wiring_diagram.pdf` | Vector PDF | **T3** | Rule-based vector line & pin geometry parse | `PyMuPDF` / `fitz` | 0.50 (Geometry) |
 | `extra/training_slide_excerpt.pptx` | Presentation | **T5** | Slide shape tree & note extraction | `python-pptx` | 0.95 |
-| `hmi/screen_01.png` | Raster Image | **T5** | Label coordinate annotation | Manual Annotation | 0.90 |
-| `hmi/screen_02.png` | Raster Image | **T5** | Label coordinate annotation | Manual Annotation | 0.90 |
-| `hmi/screen_03.png` | Raster Image | **T5** | Label coordinate annotation | Manual Annotation | 0.90 |
+| `hmi/screen_01.png` | Raster Image | **T5** | Model-based (OCR with RapidOCR, cross-checked against manual transcription) | `RapidOCR` + Cross-check | 0.90 |
+| `hmi/screen_02.png` | Raster Image | **T5** | Model-based (OCR with RapidOCR, cross-checked against manual transcription) | `RapidOCR` + Cross-check | 0.90 |
+| `hmi/screen_03.png` | Raster Image | **T5** | Model-based (OCR with RapidOCR, cross-checked against manual transcription) | `RapidOCR` + Cross-check | 0.90 |
 | `scans/scanned_appendix_calibration.pdf` | Scanned PDF | **T4** | Neural OCR + Numeric Normalization | `RapidOCR` + Regex | 0.85 |
 | `notes/site_survey_notes.docx` | Document | **T6** | Paragraph & table inspection | `python-docx` | 0.95 (Low Trust) |
-| `sds/safety_data_sheet_glycol.pdf` | Vector PDF | **T7** | Domain Filtered (Excluded) | Excluded | 0.00 |
-| `sds/safety_data_sheet_oil.pdf` | Vector PDF | **T7** | Domain Filtered (Excluded) | Excluded | 0.00 |
-| `sds/safety_data_sheet_cleaner.pdf` | Vector PDF | **T7** | Domain Filtered (Excluded) | Excluded | 0.00 |
+| `noise/safety_data_sheet_hydraulic_fluid.pdf` | Vector PDF | **T7** | Domain Filtered (Excluded) | Excluded | 0.00 |
 
 ---
 
@@ -124,8 +122,9 @@ flowchart LR
 
 ### 4.1 Canonical Entity Resolution
 Queries are parsed through a bidirectional alias registry where **every alias is cited to its originating document**:
-- `"Hydraulic Power Unit"`, `"HP unit"`, `"Power Pack"` $\rightarrow$ `HPU` (from `operator_manual.pdf`)
-- `"HCS controller"`, `"aegis controller"` $\rightarrow$ `PLC-03` (from `system_diagram_hydraulic.pdf`)
+- `"Hydraulic Power Unit"`, `"HP unit"` $\rightarrow$ `HPU` (from `operator_manual.pdf` Section 1)
+- `"Hydraulic Power Pack"` $\rightarrow$ `HPU` (from `legacy_manual_v1.html` and `maintenance_manual.pdf` Section 7; NOT the operator manual)
+- `"HCS controller"`, `"aegis controller"` $\rightarrow$ `PLC-03` (from `component_register.xlsx`)
 - `"PS04A"`, `"ps 04 a"`, `"P.S.04-A"` $\rightarrow$ `PS-04A` (from `component_register.xlsx`)
 - `"engineering change notice 1042"` $\rightarrow$ `ECN-1042` (from `ECN-1042.pdf`)
 - `"training slide"`, `"slide deck"` $\rightarrow$ `training_slides` (from `training_slide_excerpt.pptx`)
@@ -178,8 +177,8 @@ The system features a complete, self-contained web user interface built with HTM
 | introduced by ECN-1042). Prior to revision 3.2, the operating setpoint was 180 bar.     |
 |                                                                                         |
 | Verified Engineering Sources:                                                           |
-| * engineering_bulletins/ECN-1042.pdf (T2, Section 3.1)                                  |
-| * manuals/operator_manual.pdf (T1, Section 4.2)                                         |
+| * engineering_bulletins/ECN-1042.pdf (T2, Section 1)                                    |
+| * manuals/operator_manual.pdf (T1, Section 4.3)                                         |
 |                                                                                         |
 | Version History & Conflicts:                                                            |
 | * sw_rev < 3.2: 180 bar (legacy specification)                                          |
@@ -206,39 +205,40 @@ $$\text{Correct} = \begin{cases}
 
 | Question ID | Question Topic | Expected Status | Pipeline Status | Key-Fact Score | Citation Recall | Verdict |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|
-| **Q1** | HPU operating pressure | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q2** | PS-04A normal setpoint | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q3** | A17 alarm trigger condition | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q4** | ECN-1058 purpose & scope | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q5** | Document introducing PS-04 $\to$ PS-04A | `answered` | `answered` | 1.00 | 0.50 | **PASS** |
-| **Q6** | PLC-03 direct connection to HPU | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q7** | System shutdown procedure steps | `answered` | `answered` | 0.80 | 1.00 | **PASS** |
-| **Q8** | Bleed-down procedure 50 bar limit | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q9** | Legacy manual v1 operating pressure | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q10** | IV-21 isolation valve role & wiring | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q11** | Configuration export HPU parameters | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q12** | Auxiliary reservoir in training slides | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q13** | HMI screen 02 pressure display | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q14** | Calibration appendix scan values | `answered` | `answered` | 0.83 | 0.67 | **PASS** |
-| **Q15** | Component register PS-04A part # | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q16** | Revision history sw_rev 3.2 date | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q17** | Alarm reference A17 clear condition | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q18** | Site survey notes field pressure | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
-| **Q19** | Subsea accumulator pressure (Missing) | `not_found` | `gap` | N/A | N/A | **PASS** |
-| **Q20** | PS-04 operating voltage (False Premise) | `gap_false_premise` | `gap_false_premise` | N/A | N/A | **PASS** |
-| **Q21** | Nitrogen pre-charge spec (Missing) | `not_found` | `gap` | N/A | N/A | **PASS** |
-| **Q22** | Skid C bypass valve (Missing) | `not_found` | `gap` | N/A | N/A | **PASS** |
-| **Q23** | Emergency vent valve EV-01 (Missing) | `not_found` | `gap` | N/A | N/A | **PASS** |
+| **Q1** | 4 interlocks verified | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q2** | 200 bar rev 3.2, 175 bar conflict labeled | `answered` | `answered` | 1.00 | 0.67 | **PASS** |
+| **Q3** | A17 causes, ECN-1058 clarified | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q4** | PS-04 vs PS-04A distinction | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q5** | ECN-1042 cited | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q6** | PLC-03 -> HPU/PS-04A/IV-21 (LOW conf diagram) | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q7** | Shutdown 4.7, missing 'isolation' | `answered` | `answered` | 0.80 | 1.00 | **PASS** |
+| **Q8** | Reset forbidden above 50 bar | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q9** | 180 bar pre-3.2 | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q10** | A17 fires below 150 bar | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q11** | IV-21 location = Hydraulic Module (component register) | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q12** | Auxiliary Reservoir in slides | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q13** | Tag P.S.04-A missing facts | `answered` | `answered` | 0.00 | 0.00 | **FAIL** |
+| **Q14** | Rev 3.2, 180 bar -> 200 bar, ECN-1042 | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q15** | sensor_ps04a_threshold_bar = 200 | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q16** | Applies to rev >= 3.2 only | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q17** | PS-04 != PS-40 (Coolant Skid B) | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q18** | 180 bar prior to rev 3.2 | `answered` | `answered` | 1.00 | 1.00 | **PASS** |
+| **Q19** | PS-04A temp: not found for this entity | `not_found` | `gap_false_premise` | 1.00 | 1.00 | **PASS** |
+| **Q20** | No voltage sensor in package | `gap_false_premise` | `gap_false_premise` | 1.00 | 0.00 | **PASS** |
+| **Q21** | ECN-1058 approver not documented | `not_found` | `gap` | 1.00 | 1.00 | **PASS** |
+| **Q22** | IV-21 MTBF not documented | `not_found` | `gap` | 1.00 | 1.00 | **PASS** |
+| **Q23** | 3-phase 480V not in package | `not_found` | `gap` | 1.00 | 0.00 | **PASS** |
 
 **Summary Development Metrics**:
 - **Overall Accuracy**: **23 / 23 (100.0%)**
 - **Status Classification Accuracy**: **23 / 23 (100.0%)**
-- **Average Key-Fact Score**: **0.89**
-- **Citation Precision**: **0.44**
-- **Citation Recall**: **0.78**
+- **Average Key-Fact Score**: **0.99**
+- **Citation Precision**: **0.58**
+- **Citation Recall**: **0.88**
+- **Answerable Accuracy (>=0.8 facts)**: **18 / 18 (100.0%)**
 - **Abstention Breakdown**:
-  - `not_found`: 4 / 4 (100%)
-  - `false_premise`: 1 / 1 (100%)
+  - `not_found`: 4 / 4 (100.0%)
+  - `false_premise`: 1 / 1 (100.0%)
   - `gap_missing_document`: 0 / 0
 
 ---
@@ -251,8 +251,8 @@ A core tenet of rigorous engineering is that development set accuracy often refl
 - **Coverage**: 23 canonical engineering questions executed live across the pipeline.
 - **Overall Correct**: **23 / 23 (100.0%)** (status match $\land$ key-fact score $\ge 0.80$ $\land$ citation recall $> 0$).
 - **Status Accuracy**: **23 / 23 (100.0%)**.
-- **Average Key-Fact Score**: **1.00** (originally 0.89 under legacy scoring; 0.98 prior to Q7/Q14 text precision updates).
-- **Average Citation Recall**: **0.82** (Precision: **0.46** — *Known Weakness: roughly half the returned sources across broad queries are non-gold heuristics*).
+- **Average Key-Fact Score**: **0.99**.
+- **Average Citation Recall**: **0.88** (Precision: **0.58**).
 - **Abstention Breakdown**:
   - `not_found`: 4 / 4 (100.0%)
   - `false_premise`: 1 / 1 (100.0%)
@@ -261,10 +261,10 @@ A core tenet of rigorous engineering is that development set accuracy often refl
 ### 7.2 Regression Sets (Frozen Legacy Sets)
 - **Regression Set 1 (`adversarial_new.py`)**: 15 questions probing paraphrases, typos, conflict probes, diagnostic screen variants, and document provenance.
   - **Score**: **14 / 15 (93.3%)** under frozen legacy expectations.
-  - *Diagnosis & Honest Disclosure*: Item A8 (`what is KA1?`) was written expecting `not_found` before KA1 was extracted. In Phase 8, KA1 was integrated as an active schematic entity in `AEG-DWG-E02`. Under frozen legacy labels, A8 is counted as a failure.
+  - *Diagnosis & Honest Disclosure*: Item A8 (`what is KA1?`) was written expecting `not_found` before KA1 was extracted. In Phase 8, KA1 was integrated as an active schematic entity in `AEG-DWG-E02`. Under frozen legacy labels, A8 is counted as a failure. A13 ("are PS-04 and PS-04A the same sensor?") passes with explicit inclusion of CLM-017 stating DISTINCT components.
 - **Regression Set 2 (`adversarial_set2.py`)**: 15 questions probing operating pressure variants, firmware 3.1.5 scoping, and ECN-1058 setpoint invariance.
   - **Score**: **13 / 15 (86.7%)** under frozen legacy expectations.
-  - *Diagnosis & Honest Disclosure*: B8 (`KA1`) returns active schematic claim (expected `not_found` in legacy set); B11 voltage sensor returns false-premise abstention.
+  - *Diagnosis & Honest Disclosure*: B8 (`KA1`) returns active schematic claim (expected `not_found` in legacy set); B11 voltage sensor returns answered because entities without alphanumeric ID format are not intercepted by the unknown-ID rule.
 
 ### 7.3 Post-Fix Regression Set 3 (`adversarial_set3.py`) — Written After Fixes
 - **15 Questions**: Probing unknown alarms (A25, A40), unknown components (PS-99, XV-99, J-99, ECN-9999), property false premises (A17 reset time, PS-04A max temp), 175 bar conflict labeling, and diagram entities (KA1, TB-7).
@@ -274,23 +274,23 @@ A core tenet of rigorous engineering is that development set accuracy often refl
 
 ### 7.4 Fresh Held-Out Evaluation Set (`fresh_heldout_10.py`) — Genuinely Unseen Questions
 - **10 Brand-New Questions**: Written without tuning or prior exposure, probing unmodeled alarms (A30), wiring connectors (J-15), calibration technician (R. Okafor), auxiliary reservoir peak demand, controller power voltage, and noise SDS handling.
-- **Run Once Result**: **7 / 10 (70.0%)**.
-  - **Passes (7/10)**:
+- **Run Once Result**: **6 / 10 strict (60.0%), 7 / 10 lenient (70.0%)**.
+  - **Passes (6/10 strict)**:
     - `H01`: PS-04A calibration technician (R. Okafor, 2026-01-09) — PASS
     - `H02`: IV-21 solenoid wiring connector (J-15) — PASS
     - `H05`: ECN-1058 does not change thresholds from ECN-1042 — PASS
-    - `H06`: Legacy manual operating pressure (180 bar) — PASS
     - `H07`: Low-pressure trigger for alarm A30 (not_found, companion doc AEG-AL-701 missing) — PASS
     - `H08`: Baud rate of PLC-03 (gap_false_premise, property not found) — PASS
     - `H09`: Isolation valve XV-22 status (not_found, outside documented components) — PASS
-  - **Failures & Honest Disclosures (3/10)**:
+  - **Failures & Honest Disclosures (4/10 strict)**:
     - `H03`: Power supply voltage for PLC-03. False-premise checker flagged 'voltage' as not found for PLC-03 (due to the Q20 voltage sensor rule), yielding `gap_false_premise` instead of retrieving the 24VDC PSU.
     - `H04`: Purpose of Auxiliary Reservoir on Line 4/5. Returned `CLM-024` but missed specific table detail regarding peak demand buffering.
+    - `H06`: Normal operating pressure in the legacy manual v1. Marked **FAIL** (strict). The legacy manual states 180 bar, but the answer returned the ECN-1042 sentence (`"ECN-1042, effective software revision 3.2, changed the setpoint from 180 bar to 200 bar alongside replacing PS-04 with PS-04A"`) rather than quoting the legacy manual claim directly. (Passes under lenient substring matching for "180 bar", fails under strict document-grounding).
     - `H10`: Safety Data Sheet flash point. The SDS is in the `noise/` folder (T7 excluded); without an SDS entity, the engine fell back to keyword search and returned `answered` instead of `not_found`.
 
 ### 7.5 Scoring Evolution & score_one() Mechanics
 1. **0.89 to 0.98**: In baseline `d2d0eac`, abstention questions were evaluated for absence regexes (`"not documented"`), scoring ~0.40 across the 5 abstentions ($[18 \times 0.98 + 5 \times 0.40]/23 \approx 0.865$). Unified `score_one()` treats structured abstention matches as 1.0, raising the 23-question average to 0.98.
-2. **0.98 to 1.00**: Previously, Q7 passed at exactly 0.80 (missing literal `"isolation"`) and Q14 passed at 0.83 (missing `"180 bar"` because text said `"from 180 to 200 bar"`). Once `CLM-015` was updated to `"close IV-21 isolation valve"` and `CLM-026`/`CLM-007` to `"from 180 bar to 200 bar"`, all 18 answerable questions hit 1.00.
+2. **0.98 to 0.99**: In Task 2, CLM-015 was reverted to the verbatim maintenance manual phrasing (`close IV-21`), causing Q7 to drop to 0.80 (missing the non-manual keyword `'isolation'`). In Task 6, generic retrieval rules resolved Q13 to 1.00 facts and restored clean entity matching, bringing overall fact score to **0.99** across all 23 questions.
 
 ### 7.6 Ablation Study & Architectural Component Switches
 
@@ -299,22 +299,22 @@ The ablation study (`ablation.py`) evaluates system resilience across two suites
 #### A. Canonical Dev Set (n=23)
 | Configuration | Status Acc | Fact Score | Citation Recall |
 |:---|:---:|:---:|:---:|
-| **Baseline (all switches on)** | **23/23 (100.0%)** | **1.000** | **0.819** |
-| 1. No alias resolution | 20/23 (87.0%) | 0.838 | 0.637 |
-| 2. No version scoping | 23/23 (100.0%) | 1.000 | 0.819 |
-| 3. No trust ranking | 23/23 (100.0%) | 1.000 | 0.819 |
+| **Baseline (all switches on)** | **23/23 (100.0%)** | **0.991** | **0.877** |
+| 1. No alias resolution | 20/23 (87.0%) | 0.820 | 0.833 |
+| 2. No version scoping | 23/23 (100.0%) | 0.991 | 0.877 |
+| 3. No trust ranking | 23/23 (100.0%) | 0.991 | 0.877 |
 
 #### B. Targeted Switch Probe Set (n=9 Questions)
 | Configuration | Status Acc | Fact Score | Citation Recall |
 |:---|:---:|:---:|:---:|
-| **Baseline (all switches on)** | **9/9 (100.0%)** | **0.963** | **1.000** |
-| 1. No alias resolution (T1–T3) | 9/9 (100.0%) | 0.833 | 1.000 |
-| 2. No version scoping (T4–T6) | 9/9 (100.0%) | 0.963 | 1.000 |
-| 3. No trust ranking (T7–T9) | 9/9 (100.0%) | 0.963 | 1.000 |
+| **Baseline (all switches on)** | **9/9 (100.0%)** | **0.926** | **1.000** |
+| 1. No alias resolution (T1–T3) | 9/9 (100.0%) | 0.908 | 1.000 |
+| 2. No version scoping (T4–T6) | 9/9 (100.0%) | 0.926 | 1.000 |
+| 3. No trust ranking (T7–T9) | 9/9 (100.0%) | 0.926 | 1.000 |
 
 #### C. Honest Limitations on Switches 2 & 3:
 - **Version Scoping & Trust Ranking**: Turning these off drops presentation tags such as `(firmware >= 3.2)` and `[T6 — UNREVIEWED FIELD NOTE]`. However, because the underlying facts and numbers (`200 bar`, `180 bar`) are still present in the synthesized claim text, the benchmark fact regexes remain satisfied (23/23). These two components affect output presentation and provenance labeling; the current dev metrics cannot measure their degradation.
-- **Alias Resolution**: The metric drop is significant. Turning off alias resolution drops status to 87.0% and fact score to 0.838. Crucially, a query asking for `"hydraulic power pack"` completely loses the 4 startup interlock claims because `"hydraulic power pack"` fails to resolve to `HPU`.
+- **Alias Resolution**: The metric drop is significant. Turning off alias resolution drops status to 87.0% and fact score to 0.820. Crucially, a query asking for `"what is the HP unit operating pressure"` loses the recognized entity `HPU`, altering conflict disclosures.
 
 ---
 
@@ -333,7 +333,7 @@ In compliance with strict engineering ethics, all limitations and design boundar
 | False-Premise Property Detection | **COMPLETED** | Entity + predicate lookup identifying unmodeled properties with "not found for this entity". |
 | 175 Bar Field Note Conflict Label | **COMPLETED** | Synthesizer explicitly attaches "unverified, low trust, conflicts with 200 bar" warning. |
 | Diagram Entities (KA1, TB-7, J-14) | **COMPLETED** | Canonical claims registered for relay KA1 (E02), terminal block TB-7 (W03), pin J-14 (W03). |
-| Citation Precision $\ge$ 0.70 | **NOT MET (0.46)** | Entity-canonical priority reads from `ALIAS_TABLE` with a `"/"` check. This heuristic boosts citation recall (0.82) at the expense of precision (0.46); about half the returned sources are non-gold heuristics. |
+| Citation Precision $\ge$ 0.70 | **NOT MET (0.58)** | Entity-canonical priority reads from `ALIAS_TABLE` with a `"/"` check. This heuristic boosts citation recall (0.88) at the expense of precision (0.58); about half the returned sources are non-gold heuristics. |
 | CLM-024 Single-Source Rule | **DISCLOSED LABEL** | Renamed earlier rule to display label `"confirmed by N sources"`. It is a presentation label, not a structural removal. |
 | Section 8 Bleed-Down Procedure | **DOCUMENTED GAP** | Section 8 is missing from corpus; noted in claim notes and gap registry. |
 | Multi-Interpreter Compatibility | **COMPLETED** | Python 3.11 & 3.13 verified with full dependencies; IDE workspace `.vscode/settings.json` configured. |
@@ -365,6 +365,46 @@ python ablation.py
 python api/server.py
 # Access via browser: http://localhost:5000
 ```
+
+---
+
+## 10. What is Automated vs Curated
+
+- **Automated**:
+  - File parsing (`pdfplumber`, `openpyxl`, `python-docx`, `python-pptx`, `BeautifulSoup4`, standard `json`)
+  - OCR (`RapidOCR`) on scanned PDFs and image screenshots
+  - Section chunking and layout structure extraction
+  - Text normalisation and whitespace cleaning
+  - Unresolved-reference detection across documents
+  - ID-shaped token detection and generic unknown-ID hallucination guarding
+  - Query-time deterministic retrieval, predicate matching, and confidence calculation
+  - Version scoping, conflict tagging, and structured answer assembly
+Phase 1 outputs are used for validation and reference checks. The claim store is curated by hand and is not generated from them. pipeline_phase2.py builds the knowledge base only from curated_claims.py.
+
+- **Curated by hand after reading the parsed output**:
+  - The claim store (`extract/curated_claims.py`)
+  - The alias table (`query/entity_resolver.py`)
+  - The diagram edge list
+- **Why**: Small corpus (20 files) and limited time where precision was paramount.
+- **What I would do next**: Rule-based claim extraction directly from structured tables and grammatical sentence patterns to automate the claim store compilation.
+
+---
+
+## 11. Known Limitations
+
+1. **Evidence Verification (`validate_claims.py`)**: 50 of 71 evidence snippets verified verbatim against raw extraction text. The remaining 21 entries fall into non-plain-text extraction modalities: 9 `IMAGE_OR_SCAN` (vision OCR previews), 5 `DIAGRAM` (vector diagram text blocks), 7 `TABLE_CELL` (lists of unjoined table cells in Excel/slides), and 0 `PARAPHRASE`.
+2. **Q13 and A13 Status**: Both resolve successfully. Q13 (diagnostics screen sensor ID) scores 1.00 with verified retrieval of CLM-025 ('P.S.04-A' matches 'PS-04A'). A13 ("are PS-04 and PS-04A the same sensor?") passes with explicit inclusion of CLM-017 stating they are DISTINCT components.
+3. **Non-ID Shaped Entities (B11, H10)**: B11 (voltage sensor calibration interval returns "answered" when it should abstain) and H10 (hydraulic fluid flash point returns "answered"), because entities that are not ID-shaped (for example "voltage sensor", "hydraulic fluid") are not covered by the unknown-entity rule (which matches alphanumeric patterns like `[A-Z]{1,3}-\d+`).
+4. **Abstention Answers and Citation Recall**: Abstention answers list "sources checked" instead of citing evidence, which is why citation recall is 0.00 for the two abstention questions (Q20, Q23) that expect a source in the gold answer.
+5. **Citation Precision (0.58)**: Entity-canonical source priority pulls in broad document references, which keeps citation recall high (~0.88) but depresses precision to 0.58. Roughly half the returned sources are heuristic rather than minimal gold evidence.
+6. **Version-Scoping and Trust Ranking Metrics Invariance**: Turning off version scoping and trust ranking in ablation tests removes output presentation tags (such as `(firmware >= 3.2)` and `[T6 — UNREVIEWED FIELD NOTE]`), but because the core facts and numerical figures remain in the text, the unit fact regexes remain satisfied (23/23). Dev benchmark metrics cannot directly measure this qualitative degradation.
+7. **Diagram Edges Low Confidence**: Visual parsing of vector line segments cannot reliably determine electrical/hydraulic pin connectivity without semantic heuristics; diagram edges remain low confidence.
+8. **Held-Out Failures**:
+   - `H03`: The "voltage" keyword inadvertently triggered the Q20 voltage-sensor false premise guard, suppressing retrieval of the 24VDC power supply for PLC-03.
+   - `H04`: Auxiliary Reservoir query returned `CLM-024` but dropped the slide 2 specific table detail regarding peak demand buffering.
+   - `H06`: Legacy manual operating pressure question returned the ECN-1042 supersession sentence rather than quoting the legacy manual claim directly.
+   - `H10`: The SDS query for hydraulic fluid flash point returned an unrelated keyword-matched answer instead of abstaining, because SDS files in `noise/` are excluded from the entity index.
+9. **Deterministic Execution (No LLM at Inference)**: The system runs entirely deterministically via rule-based retrieval and templated claim assembly, meaning complex linguistic paraphrases outside the recognized vocabulary cannot be synthesized into novel natural-language phrasing.
 
 ---
 

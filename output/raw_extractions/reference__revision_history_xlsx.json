@@ -1,0 +1,83 @@
+{
+  "source_file": "reference/revision_history.xlsx",
+  "file_format": "xlsx",
+  "trust_tier": 3,
+  "trust_label": "revision_history",
+  "content_blocks": [
+    {
+      "text": "Sheet: Revision History | Headers: Software Revision, Release Date, Summary of Changes, Related Documents | Rows: 5",
+      "block_type": "table_summary",
+      "page": null,
+      "section": "Revision History",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Software Revision",
+        "Release Date",
+        "Summary of Changes",
+        "Related Documents"
+      ],
+      "rows": [
+        [
+          "3.0",
+          "2023-06-02",
+          "Initial Series-7 release.",
+          "AEG-OM-700 Rev 1, AEG-MM-700 Rev 1"
+        ],
+        [
+          "3.1",
+          "2024-02-14",
+          "Minor HMI diagnostics screen updates. No change to sensors or setpoints.",
+          "AEG-OM-700 Rev 2"
+        ],
+        [
+          "3.2",
+          "2025-09-30",
+          "Pressure sensor PS-04 replaced by PS-04A. Normal HPU discharge pressure setpoint changed from 180 bar to 200 bar. See ECN-1042.",
+          "ECN-1042, AEG-OM-700 Rev 3, AEG-MM-700 Rev 2, AEG-CR-700 Rev 2"
+        ],
+        [
+          "3.2.1",
+          "2025-11-18",
+          "Documentation correction: Alarm A17 condition text no longer names a specific sensor (PS-04 or PS-04A) so it reads correctly on units at either revision. Alarm thresholds unchanged. See ECN-1058.",
+          "ECN-1058, AEG-AL-700 Rev 5"
+        ],
+        [
+          "3.3",
+          "2026-04-07 (planned)",
+          "Scheduled: extended diagnostics logging. No sensor or setpoint changes currently planned.",
+          "Not yet published"
+        ]
+      ],
+      "page": null,
+      "section": "Revision History",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "sheet_names": [
+      "Revision History"
+    ],
+    "parse_time_seconds": 0.006,
+    "file_notes": "SW revision timeline 3.0\u21923.3(planned)"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "xlsx_parsing",
+      "method": "openpyxl_xlsx",
+      "method_type": "deterministic",
+      "reason": "openpyxl reads cell values directly from the XLSX XML structure. No ML or heuristics \u2014 deterministic read of cell data. Merged cell handling uses openpyxl's merge range API to propagate values."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

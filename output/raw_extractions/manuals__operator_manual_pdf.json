@@ -1,0 +1,237 @@
+{
+  "source_file": "manuals/operator_manual.pdf",
+  "file_format": "pdf",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "Aegis Series-7 HCS \u2014 Operator Manual AEG-OM-700 Rev 4 Aegis Series-7 Hydraulic Control System Operator Manual Document AEG-OM-700 | Revision 4 | Applies to software revision 3.2 and later",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "1. Overview",
+      "block_type": "heading",
+      "page": 1,
+      "section": "1 Overview",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "The Aegis Series-7 Hydraulic Control System (HCS) provides closed-loop hydraulic pressure regulation for industrial press lines. The system is built around the Hydraulic Power Unit (HPU), which supplies pressurized fluid to the press circuit under the supervision of the HCS Controller (PLC-03). Throughout Aegis documentation the Hydraulic Power Unit may also be referred to as the Hydraulic Unit or the HP unit, depending on which department produced the document. All three terms refer to the same physical assembly.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "1 Overview",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "2. Key Components",
+      "block_type": "heading",
+      "page": 1,
+      "section": "2 Key Components",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Reference Component Function HPU Hydraulic Power Unit Generates and regulates hydraulic pressure IV-21 Isolation Valve 21 Isolates the HPU from the press circuit PS-04A Pressure Sensor 04A Reports HPU discharge pressure to PLC-03 PLC-03 HCS Controller Supervises startup, monitoring, and alarms Note: earlier Aegis units shipped with pressure sensor PS-04. As of software revision 3.2, PS-04 is superseded by PS-04A; see Engineering Change Notice ECN-1042 for details.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "2 Key Components",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "4. Operating Procedures",
+      "block_type": "heading",
+      "page": 1,
+      "section": "4 Operating Procedures",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "4.3 Starting the Hydraulic Power Unit",
+      "block_type": "heading",
+      "page": 1,
+      "section": "4.3 Starting the Hydraulic Power Unit",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Before starting, verify: \u2022 Hydraulic fluid level is within the normal band on the sight glass. \u2022 Isolation valve IV-21 is OPEN. \u2022 The emergency stop circuit is RESET. WARNING: Do not start the Hydraulic Power Unit with the maintenance access panel removed. Rotating components inside the HPU housing are exposed when the panel is off. Startup sequence:",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "4.3 Starting the Hydraulic Power Unit",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "1 Turn the POWER selector to ON.",
+      "block_type": "heading",
+      "page": 1,
+      "section": "1 Turn the POWER selector to ON.",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "2 Press START.",
+      "block_type": "heading",
+      "page": 1,
+      "section": "2 Press START.",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "3 Verify discharge pressure, as reported by PS-04A, reaches 200 bar. This is the normal operating pressure",
+      "block_type": "heading",
+      "page": 1,
+      "section": "3 Verify discharge pressure, as reported by PS-04A, reaches 200 bar. This is the normal operating pressure",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "for software revision 3.2 and later; see ECN-1042 for the pressure change history.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "3 Verify discharge pressure, as reported by PS-04A, reaches 200 bar. This is the normal operating pressure",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "5. Normal Operating Ranges",
+      "block_type": "heading",
+      "page": 1,
+      "section": "5 Normal Operating Ranges",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Normal HPU discharge pressure is 200 bar on software revision 3.2 and later. On revisions prior to 3.2, normal discharge pressure was 180 bar, measured by the original PS-04 sensor. Do not compare live readings against AEG-OM-700 Rev 4 | Page 1",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "5 Normal Operating Ranges",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Aegis Series-7 HCS \u2014 Operator Manual AEG-OM-700 Rev 4 the 180 bar figure on a unit running revision 3.2 or later \u2014 the setpoint changed along with the sensor replacement.",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "5 Normal Operating Ranges",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "6. Alarms",
+      "block_type": "heading",
+      "page": 2,
+      "section": "6 Alarms",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "See the Aegis Alarm Reference (AEG-AL-700) for the full alarm list, including alarm A17 (Hydraulic Pressure Low), its possible causes, and required operator actions.",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "6 Alarms",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "7. Controller Reset",
+      "block_type": "heading",
+      "page": 2,
+      "section": "7 Controller Reset",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Do not reset the PLC-03 controller while hydraulic pressure is above 50 bar. Resetting the controller under pressure can cause an uncommanded valve transition. Bleed pressure below 50 bar first, using the manual bleed procedure in Section 8, before performing a controller reset. AEG-OM-700 Rev 4 | Page 2",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "7 Controller Reset",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Reference",
+        "Component",
+        "Function"
+      ],
+      "rows": [
+        [
+          "HPU",
+          "Hydraulic Power Unit",
+          "Generates and regulates hydraulic pressure"
+        ],
+        [
+          "IV-21",
+          "Isolation Valve 21",
+          "Isolates the HPU from the press circuit"
+        ],
+        [
+          "PS-04A",
+          "Pressure Sensor 04A",
+          "Reports HPU discharge pressure to PLC-03"
+        ],
+        [
+          "PLC-03",
+          "HCS Controller",
+          "Supervises startup, monitoring, and alarms"
+        ]
+      ],
+      "page": 1,
+      "section": "5 Normal Operating Ranges",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "page_count": 2,
+    "pdf_info": {
+      "Author": "(anonymous)",
+      "CreationDate": "D:20260926165238+00'00'",
+      "Creator": "(unspecified)",
+      "Keywords": "",
+      "ModDate": "D:20260926165238+00'00'",
+      "Producer": "ReportLab PDF Library - (opensource)",
+      "Subject": "(unspecified)",
+      "Title": "(anonymous)",
+      "Trapped": "False"
+    },
+    "parse_time_seconds": 0.13,
+    "file_notes": "AEG-OM-700 Rev 4, born-digital"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "text_extraction",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "pdfplumber parses PDF text objects directly from file structure; no OCR or ML. Deterministic: same input always gives same output."
+    },
+    {
+      "step_name": "text_normalization",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "Rule-based artifact replacement from NORMALIZATION_TABLE (\u00f9\u2192\u2014, fi\u2192\u2192, (cid:N)\u2192bullet). Deterministic mapping, no ML."
+    },
+    {
+      "step_name": "table_extraction_page_1",
+      "method": "pdfplumber_table",
+      "method_type": "rule_based",
+      "reason": "Ruled-line detection heuristic to find table cells."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

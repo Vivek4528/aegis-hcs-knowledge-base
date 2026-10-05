@@ -1,0 +1,130 @@
+{
+  "source_file": "extra/training_slide_excerpt.pptx",
+  "file_format": "pptx",
+  "trust_tier": 5,
+  "trust_label": "training_deck",
+  "content_blocks": [
+    {
+      "text": "Aegis Series-7 HCS",
+      "block_type": "heading",
+      "page": 1,
+      "section": "Slide 1",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "New Operator Orientation \u2014 Hydraulic Power Unit Basics",
+      "block_type": "heading",
+      "page": 1,
+      "section": "Slide 1",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Training Excerpt \u2014 Slides 4\u20136 of the full deck",
+      "block_type": "heading",
+      "page": 1,
+      "section": "Slide 1",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "What is the HPU?",
+      "block_type": "heading",
+      "page": 2,
+      "section": "Slide 2",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "The Hydraulic Power Unit is the heart of the press's hydraulic system.\nYou'll sometimes hear techs call it the \"hydraulic pack\" or just \"the unit\" \u2014 same thing.\nIt pulls fluid from the main reservoir and, on most Line 4/5 configurations, tops up from a smaller Auxiliary Reservoir during peak demand.\nDischarge pressure is what the controller watches to decide if the unit is running normally.",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "Slide 2",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Note: \"Auxiliary Reservoir\" is a Line 4/5-specific configuration detail and is not covered in the standard Operator Manual.",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "Slide 2",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Before You Press Start",
+      "block_type": "heading",
+      "page": 3,
+      "section": "Slide 3",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "These four checks match the startup interlocks shown on the HOME screen of the HMI.",
+      "block_type": "paragraph",
+      "page": 3,
+      "section": "Slide 3",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Full startup and shutdown procedures are in the Operator Manual (AEG-OM-700) \u2014 this slide is a quick memory aid only, not a replacement procedure.",
+      "block_type": "paragraph",
+      "page": 3,
+      "section": "Slide 3",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Check",
+        "What good looks like"
+      ],
+      "rows": [
+        [
+          "Isolation valve",
+          "IV-21 fully open"
+        ],
+        [
+          "Emergency stop",
+          "Reset (not latched)"
+        ],
+        [
+          "Access panel",
+          "Installed and secured"
+        ],
+        [
+          "Fluid level",
+          "Within the sight glass band"
+        ]
+      ],
+      "page": 3,
+      "section": "Slide 3",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "slide_count": 3,
+    "normalization_artifacts_fixed": 1,
+    "parse_time_seconds": 0.012,
+    "file_notes": "3 slides, restates operator manual, mentions Auxiliary Reservoir"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "pptx_parsing",
+      "method": "python_pptx",
+      "method_type": "deterministic",
+      "reason": "python-pptx reads shape text and table content from the OOXML presentation structure. No ML or heuristics \u2014 deterministic extraction of text frames, table cells, and slide metadata."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

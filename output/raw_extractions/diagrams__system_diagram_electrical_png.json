@@ -1,0 +1,46 @@
+{
+  "source_file": "diagrams/system_diagram_electrical.png",
+  "file_format": "png_diagram",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "Aegis Series-7 HCS - Electrical Schematic (AEG-DWG-E02)\nPower distribution and interlock wiring\nMAINDISCONNECT\nQ1\nCONTROL XFMR\nT1 480:120V\nPLC-0324VDC\nE-STOPSAFETY\nPLC-03I/ORACK\nPOWERSUPPLY\nRELAY KA1\nSENSORLOOP\nIV-21VALVE\nTB-7 REF: PRESSURE XDCR LOOP\nPOWER 24VDC\nDRIVER\nfeeds pressure transducer\nloop (see wiring diagram\nAEG-DWG-W0 3)",
+      "block_type": "ocr_text",
+      "page": 1,
+      "section": null,
+      "bbox": null,
+      "confidence": 0.9841
+    }
+  ],
+  "tables": [],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "image_size": "1400x1000",
+    "rapidocr_items": 19,
+    "rapidocr_avg_conf": 0.9841,
+    "ocr_vs_manual_mismatch": {
+      "similarity": 0.6435,
+      "mismatch_rate": 0.3565,
+      "ocr_word_count": 54,
+      "reference_word_count": 61
+    },
+    "manual_transcription_used_as": "cross_check_only",
+    "LLM_vision_crosscheck_voltage_sensor_check": "NO voltage sensor present in AEG-DWG-E02. Components: Q1 (Main Disconnect), T1 (480:120V transformer), PLC-03 24VDC Power Supply, PLC-03 I/O Rack, KA1 (E-Stop Safety Relay), Sensor Loop Power 24VDC, IV-21 Valve Driver. Q20 is unanswerable: no voltage sensor in this diagram or any calibration record.",
+    "LLM_vision_crosscheck_q6_purple_edges_only": "For Q6 (direct controller connections): only control/signal edges apply. From AEG-DWG-E02: PLC-03 I/O Rack connects to IV-21 Valve Driver (signal), and to E-Stop Safety Relay KA1 (signal). PLC-03 24VDC Power Supply feeds Sensor Loop Power 24VDC (power, not signal \u2014 exclude from Q6 per user instruction). See wiring diagram AEG-DWG-W03 for TB-7 (pressure transducer loop).",
+    "parse_time_seconds": 5.448,
+    "file_notes": "AEG-DWG-E02, raster, partial low-contrast labels"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "rapidocr_png",
+      "method": "vision_model_ocr",
+      "method_type": "model_based",
+      "reason": "RapidOCR ONNX models (DBNet + CRNN) run on the PNG image. Model-based: uses neural networks for both detection and recognition."
+    }
+  ],
+  "overall_confidence": 0.9,
+  "warnings": [],
+  "failures": []
+}

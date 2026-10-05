@@ -1,0 +1,294 @@
+{
+  "source_file": "diagrams/system_diagram_hydraulic.pdf",
+  "file_format": "pdf_diagram",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "Aegis Series-7 HCS \u2014 Hydraulic Schematic (AEG-DWG-H01)",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        119.2614974975586,
+        36.49002456665039,
+        492.738525390625,
+        54.39102554321289
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "Component connectivity is shown graphically. Refer to Component Register AEG-CR-700 for identifiers.",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        122.37999725341797,
+        56.199989318847656,
+        489.61993408203125,
+        67.19198608398438
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "PLC-03",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        286.8974914550781,
+        208.57000732421875,
+        317.9024658203125,
+        220.9630126953125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "(HCS Controller)",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        267.1514892578125,
+        219.57000732421875,
+        337.64849853515625,
+        231.9630126953125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "Hydraulic Power Unit",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        257.1390075683594,
+        309.3699951171875,
+        347.6610412597656,
+        321.76300048828125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "(HPU)",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        289.90350341796875,
+        320.3699951171875,
+        314.896484375,
+        332.76300048828125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "PS-04A",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        113.84549713134766,
+        314.3699951171875,
+        145.3544921875,
+        326.76300048828125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "IV-21",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        435.6449890136719,
+        314.3699951171875,
+        457.1549987792969,
+        326.76300048828125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "Main Reservoir",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        270.1394958496094,
+        415.16998291015625,
+        334.6605224609375,
+        427.56298828125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "Press Circuit",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        274.6394958496094,
+        515.969970703125,
+        330.1605224609375,
+        528.3629760742188
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "Auxiliary",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        448.99200439453125,
+        410.16998291015625,
+        487.0080261230469,
+        422.56298828125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "Reservoir",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        447.2414855957031,
+        421.16998291015625,
+        488.75848388671875,
+        433.56298828125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "\u2014 purple lines: control/signal connections to PLC-03",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        54.0,
+        381.30999755859375,
+        216.62396240234375,
+        390.7879943847656
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "\u2014 grey lines: hydraulic fluid path",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        54.0,
+        394.27001953125,
+        155.1499786376953,
+        403.7480163574219
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "\u2014 tan line: reservoir interconnect",
+      "block_type": "diagram_label",
+      "page": 1,
+      "section": null,
+      "bbox": [
+        54.0,
+        407.2300109863281,
+        156.7039794921875,
+        416.7080078125
+      ],
+      "confidence": 0.85
+    },
+    {
+      "text": "Diagram topology (LOW CONFIDENCE, rule-based vector extraction): Nodes: []. Edges: [('PLC-03', 'HPU', 'control_signal'), ('PLC-03', 'PS-04A', 'control_signal'), ('PLC-03', 'IV-21', 'control_signal'), ('Main Reservoir', 'HPU', 'hydraulic_fluid'), ('Auxiliary Reservoir', 'Main Reservoir', 'reservoir_interconnect'), ('HPU', 'Press Circuit', 'hydraulic_fluid')]",
+      "block_type": "diagram_topology",
+      "page": 1,
+      "section": null,
+      "bbox": null,
+      "confidence": 0.4
+    }
+  ],
+  "tables": [],
+  "diagrams": [
+    {
+      "nodes": [],
+      "edges": [
+        {
+          "from": "PLC-03",
+          "to": "HPU",
+          "type": "control_signal",
+          "note": "purple lines: control/signal connections to PLC-03"
+        },
+        {
+          "from": "PLC-03",
+          "to": "PS-04A",
+          "type": "control_signal",
+          "note": "purple lines: control/signal connections to PLC-03"
+        },
+        {
+          "from": "PLC-03",
+          "to": "IV-21",
+          "type": "control_signal",
+          "note": "purple lines: control/signal connections to PLC-03"
+        },
+        {
+          "from": "Main Reservoir",
+          "to": "HPU",
+          "type": "hydraulic_fluid",
+          "note": "grey lines: hydraulic fluid path"
+        },
+        {
+          "from": "Auxiliary Reservoir",
+          "to": "Main Reservoir",
+          "type": "reservoir_interconnect",
+          "note": "tan line: reservoir interconnect"
+        },
+        {
+          "from": "HPU",
+          "to": "Press Circuit",
+          "type": "hydraulic_fluid",
+          "note": "grey lines: hydraulic fluid path"
+        }
+      ],
+      "annotations": [
+        "Aegis Series-7 HCS \u2014 Hydraulic Schematic (AEG-DWG-H01)",
+        "Component connectivity is shown graphically. Refer to Component Register AEG-CR-700 for identifiers.",
+        "PLC-03",
+        "(HCS Controller)",
+        "Hydraulic Power Unit",
+        "(HPU)",
+        "PS-04A",
+        "IV-21",
+        "Main Reservoir",
+        "Press Circuit",
+        "Auxiliary",
+        "Reservoir",
+        "\u2014 purple lines: control/signal connections to PLC-03",
+        "\u2014 grey lines: hydraulic fluid path",
+        "\u2014 tan line: reservoir interconnect"
+      ],
+      "confidence": 0.4
+    }
+  ],
+  "structured_data": null,
+  "metadata": {
+    "page_count": 1,
+    "page_1_shape_nodes": 0,
+    "page_1_edge_lines": 16,
+    "parse_time_seconds": 0.064,
+    "file_notes": "AEG-DWG-H01, topology from shapes"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "vector_shape_extraction",
+      "method": "pymupdf_vector_shapes",
+      "method_type": "rule_based",
+      "reason": "PyMuPDF extracts vector drawing primitives (lines, rectangles, paths, text). Connectivity is inferred by spatial proximity rules: (1) text blocks near a shape are its labels, (2) lines connecting two shapes represent edges. Rule-based, not ML \u2014 but inherently uncertain because shape semantics (hydraulic line vs signal line vs annotation line) are inferred from color and position, not explicit metadata. Result is marked LOW confidence."
+    }
+  ],
+  "overall_confidence": 0.5,
+  "warnings": [
+    "Diagram topology extracted via vector shape geometry. Confidence is LOW. Shape semantics (hydraulic/signal/power lines) inferred from spatial position and color, not explicit PDF metadata. Verify against visual inspection."
+  ],
+  "failures": []
+}

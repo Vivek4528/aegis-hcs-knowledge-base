@@ -1,0 +1,151 @@
+{
+  "source_file": "reference/component_register.xlsx",
+  "file_format": "xlsx",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "Sheet: Components | Headers: Component ID (as printed), Common Name, Known Aliases, Location, Status, Notes | Rows: 12",
+      "block_type": "table_summary",
+      "page": null,
+      "section": "Components",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Component ID (as printed)",
+        "Common Name",
+        "Known Aliases",
+        "Location",
+        "Status",
+        "Notes"
+      ],
+      "rows": [
+        [
+          "HPU",
+          "Hydraulic Power Unit",
+          "Hydraulic Unit; HP unit; Hydraulic Power Pack",
+          "Skid A, Bay 2",
+          "Active",
+          "Primary hydraulic pressure source for the press circuit."
+        ],
+        [
+          "IV-21",
+          "Isolation Valve 21",
+          "Isolation Valve; IV21",
+          "Hydraulic Module",
+          "Active",
+          "Must be OPEN prior to HPU startup."
+        ],
+        [
+          "PS-04",
+          "Pressure Sensor 04",
+          "PRESSURE SENSOR 04; P04; PS04",
+          "HPU discharge line",
+          "Superseded",
+          "Superseded by PS-04A effective software rev 3.2. See ECN-1042."
+        ],
+        [
+          "PS-04A",
+          "Pressure Sensor 04A",
+          "P04A; PS04A",
+          "HPU discharge line",
+          "Active",
+          "Installed per ECN-1042. Requires controller firmware >= 3.2."
+        ],
+        [
+          "PS-40",
+          "Pressure Sensor 40",
+          "P40; PS40",
+          "Coolant Loop, Skid B",
+          "Active",
+          "NOT related to the HPU discharge circuit. Do not confuse with PS-04 / PS-04A."
+        ],
+        [
+          "PLC-03",
+          "HCS Controller",
+          "Controller; Aegis Controller",
+          "Control Cabinet 1",
+          "Active",
+          "Supervises startup sequencing, alarms, and interlocks."
+        ],
+        [
+          "A17",
+          "Alarm: Hydraulic Pressure Low",
+          "\u2014",
+          "N/A (software alarm)",
+          "Active",
+          "See Alarm Reference AEG-AL-700 for thresholds and required actions."
+        ],
+        [
+          "A18",
+          "Alarm: Hydraulic Pressure High",
+          "\u2014",
+          "N/A (software alarm)",
+          "Active",
+          "See Alarm Reference AEG-AL-700."
+        ],
+        [
+          "A19",
+          "Alarm: Pressure Sensor Signal Invalid",
+          "\u2014",
+          "N/A (software alarm)",
+          "Active",
+          "See Alarm Reference AEG-AL-700."
+        ],
+        [
+          "TB-7",
+          "Terminal Block 7",
+          "\u2014",
+          "Control Cabinet 1",
+          "Active",
+          "Wiring reference only, used in AEG-DWG-W03; corresponds to the PS-04A signal loop."
+        ],
+        [
+          "Q1",
+          "Main Disconnect",
+          "\u2014",
+          "Control Cabinet 1",
+          "Active",
+          "480V incoming disconnect."
+        ],
+        [
+          "T1",
+          "Control Transformer",
+          "\u2014",
+          "Control Cabinet 1",
+          "Active",
+          "480:120V control power."
+        ]
+      ],
+      "page": null,
+      "section": "Components",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "sheet_names": [
+      "Components"
+    ],
+    "parse_time_seconds": 0.018,
+    "file_notes": "AEG-CR-700, component IDs/aliases/locations"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "xlsx_parsing",
+      "method": "openpyxl_xlsx",
+      "method_type": "deterministic",
+      "reason": "openpyxl reads cell values directly from the XLSX XML structure. No ML or heuristics \u2014 deterministic read of cell data. Merged cell handling uses openpyxl's merge range API to propagate values."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

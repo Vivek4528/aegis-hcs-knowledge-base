@@ -1,0 +1,100 @@
+{
+  "source_file": "engineering_bulletins/ECN-1042.pdf",
+  "file_format": "pdf",
+  "trust_tier": 2,
+  "trust_label": "ecn_bulletin",
+  "content_blocks": [
+    {
+      "text": "Engineering Change Notice ECN-1042 Engineering Change Notice ECN-1042 ECN Number: ECN-1042 Title: Pressure Sensor Replacement (PS-04 \u2192 PS-04A) and Operating Pressure Update Effective: Software Revision 3.2 Affected Assembly: Hydraulic Power Unit (HPU) Status: Released",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "1. Description of Change",
+      "block_type": "heading",
+      "page": 1,
+      "section": "1 Description of Change",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Effective software revision 3.2, pressure sensor PS-04 is replaced by pressure sensor PS-04A at the HPU discharge line. PS-04A uses an updated signal conditioning circuit and is not a form-fit-function replacement for PS-04; controller firmware must be at revision 3.2 or later to read PS-04A correctly. Alongside the sensor change, the normal HPU discharge pressure setpoint is revised from 180 bar to 200 bar. This is a deliberate process change, not a sensor calibration artifact: the higher setpoint improves press cycle time on Series-7 units manufactured after 2024. PS-04 remains installed and supported on units running software revisions prior to 3.2. Do not install PS-04A on a controller running firmware older than 3.2.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "1 Description of Change",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "2. Reason for Change",
+      "block_type": "heading",
+      "page": 1,
+      "section": "2 Reason for Change",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Field data showed PS-04's signal drift exceeded tolerance after approximately 18 months of continuous service in high-cycle installations, occasionally triggering nuisance Alarm A19 (Sensor Signal Invalid). PS-04A corrects this drift behavior.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "2 Reason for Change",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "3. Impacted Documentation",
+      "block_type": "heading",
+      "page": 1,
+      "section": "3 Impacted Documentation",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Operator Manual AEG-OM-700, Maintenance Manual AEG-MM-700, and Component Register AEG-CR-700 have been updated to reflect PS-04A and the 200 bar setpoint. See also ECN-1058 for a related alarm threshold correction. ECN-1042 | Page 1",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "3 Impacted Documentation",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "page_count": 1,
+    "pdf_info": {
+      "Author": "(anonymous)",
+      "CreationDate": "D:20260926165238+00'00'",
+      "Creator": "(unspecified)",
+      "Keywords": "",
+      "ModDate": "D:20260926165238+00'00'",
+      "Producer": "ReportLab PDF Library - (opensource)",
+      "Subject": "(unspecified)",
+      "Title": "(anonymous)",
+      "Trapped": "False"
+    },
+    "parse_time_seconds": 0.05,
+    "file_notes": "PS-04\u2192PS-04A, 180\u2192200 bar, effective rev 3.2"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "text_extraction",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "pdfplumber parses PDF text objects directly from file structure; no OCR or ML. Deterministic: same input always gives same output."
+    },
+    {
+      "step_name": "text_normalization",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "Rule-based artifact replacement from NORMALIZATION_TABLE (\u00f9\u2192\u2014, fi\u2192\u2192, (cid:N)\u2192bullet). Deterministic mapping, no ML."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

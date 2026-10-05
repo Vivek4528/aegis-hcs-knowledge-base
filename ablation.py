@@ -26,10 +26,10 @@ TARGETED_PROBES = [
     # Alias Switch Probes
     {
         "id": "T1",
-        "question": "What is the normal operating pressure of the hydraulic power pack?",
+        "question": "what is the HP unit operating pressure",
         "switch": "alias",
         "expected_status": "answered",
-        "key_facts": ["200 bar", "hydraulic power unit", "hpu"],
+        "key_facts": ["200 bar", "180 bar"],
         "expected_sources": ["manuals/operator_manual.pdf"],
     },
     {
@@ -207,7 +207,9 @@ def print_diff(title, q_id, base_dict, ablated_dict):
         print("  [Identical text; status or evidence citation differs]")
 
 
-print_diff("Switch 1 Proof: Alias Resolution OFF for T1 ('hydraulic power pack')", "T1", base_targeted, no_alias_targeted)
+print_diff("Switch 1 Proof: Alias Resolution OFF for T1 ('what is the HP unit operating pressure')", "T1", base_targeted, no_alias_targeted)
+print(f"  Switch ON recognized_entities : {base_targeted['T1'].get('recognized_entities')}")
+print(f"  Switch OFF recognized_entities: {no_alias_targeted['T1'].get('recognized_entities')}")
 print_diff("Switch 2 Proof: Version Scoping OFF for T4 ('pressure before 3.2 on firmware 3.1.5')", "T4", base_targeted, no_ver_targeted)
 print_diff("Switch 3 Proof: Trust Ranking OFF for T9 ('unreviewed T6 note treated as T1')", "T9", base_targeted, no_trust_targeted)
 print("=" * 82)

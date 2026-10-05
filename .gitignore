@@ -1,8 +1,8 @@
 __pycache__/
-*.pyc
 .pytest_cache/
+*.pyc
 .env
-output/
-raw_extractions/
 *.log
-docs/figures/*.png
+output/logs/
+aegis-dataset/
+task-data/

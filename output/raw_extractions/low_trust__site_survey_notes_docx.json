@@ -1,0 +1,98 @@
+{
+  "source_file": "low_trust/site_survey_notes.docx",
+  "file_format": "docx",
+  "trust_tier": 6,
+  "trust_label": "field_notes",
+  "content_blocks": [
+    {
+      "text": "Site Visit Notes \u2014 Line 4 HPU",
+      "block_type": "heading",
+      "page": 1,
+      "section": "Site Visit Notes \u2014 Line 4 HPU",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "(typed up from notebook, not reviewed)",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Site Visit Notes \u2014 Line 4 HPU",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Went out to look at the Line 4 HP unit again, still occasionally throwing the low pressure light even though it doesn't seem to actually be low. Talked to the shift lead, he said it's been doing this on and off since the sensor got swapped out.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Site Visit Notes \u2014 Line 4 HPU",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Checked the gauge on the local panel and it read about 175 bar during a normal run, not 180 like the manual says it should be. Could be the gauge is a little off, didn't have a calibrated reference on me. Didn't check against the HMI diagnostics screen this time.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Site Visit Notes \u2014 Line 4 HPU",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Valve (IV-21) looked fine, fully open, no leaks visible. Fluid level looked ok too, maybe a touch low but within the sight glass band.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Site Visit Notes \u2014 Line 4 HPU",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Alarm history on the panel showed a couple of A17s over the last week, cleared themselves pretty quick each time based on what the operator said \u2014 didn't confirm the actual duration.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Site Visit Notes \u2014 Line 4 HPU",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Recommend someone with a calibrated gauge go check the actual pressure properly, this was just a quick look. Also didn't get a chance to check what software revision the controller is running on this line, might be relevant.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Site Visit Notes \u2014 Line 4 HPU",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "\u2014 J. Torres, field service (no date recorded on original notebook page)",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Site Visit Notes \u2014 Line 4 HPU",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "style_1": "Heading 1",
+    "style_2": "",
+    "style_3": "",
+    "style_4": "",
+    "style_5": "",
+    "style_6": "",
+    "style_7": "",
+    "style_8": "",
+    "parse_time_seconds": 0.007,
+    "file_notes": "Informal, unreviewed, contradicts manual values"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "docx_parsing",
+      "method": "python_docx",
+      "method_type": "deterministic",
+      "reason": "python-docx reads paragraph and table content from the OOXML (XML-based) document structure. No ML or heuristics \u2014 deterministic extraction of text, styles, and table cell contents."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

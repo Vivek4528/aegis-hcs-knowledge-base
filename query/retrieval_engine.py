@@ -142,12 +142,19 @@ def search(query: str, kb, version_hint: str = None) -> dict:
                 "AEG-DWG-E02": "diagrams/system_diagram_electrical.png",
                 "AEG-DWG-W03": "diagrams/wiring_diagram.pdf",
             }
+            claim_sources = [ev.get("source_file", "") for ev in claim.get("evidence", [])]
             for e in entities:
                 if e in doc_source_map:
                     doc_src = doc_source_map[e]
-                    claim_sources = [ev.get("source_file", "") for ev in claim.get("evidence", [])]
                     if doc_src in claim_sources:
                         score += 8
+            # Source mention in query text (e.g. diagnostics screenshot, screen_03, etc.)
+            for cs in claim_sources:
+                cs_lower = cs.lower()
+                cs_base = os.path.splitext(os.path.basename(cs_lower))[0]
+                if cs_base in norm_q or ("diagnostics" in norm_q and "diagnostics" in cs_lower):
+                    score += 8
+                    break
 
         # Predicate match
         if predicates and claim["predicate"] in predicates:
@@ -255,17 +262,102 @@ def search(query: str, kb, version_hint: str = None) -> dict:
         and kb.claims[cid]["subject"] in entities
         and kb.claims[cid]["status"] in ("conflict", "observed")
     ] if entities else []
-    evidence = _collect_evidence(top_claims, predicates, entities)
+    # ── General Predicate Rule & Entity Scoping (Task 5) ─────────────────────
+    if status in ("gap", "gap_false_premise", "not_found"):
+        answer_claims = top_claims
+        related_claims = []
+    else:
+        # 1. Alarm questions: "what does alarm X mean/indicate"
+        alarm_entities = [
+            e for e in entities
+            if (e.startswith("A") and e[1:].isdigit()) or any(c.get("predicate", "").startswith("alarm_") for c in kb.claims.values() if c.get("subject") == e)
+        ]
+        is_alarm_query = bool(alarm_entities and (any(p.startswith("alarm_") for p in predicates) or "alarm" in norm_q or any(e.lower() in norm_q for e in alarm_entities)))
+
+        # 2. Multi-entity or comparison questions: "same as", "difference", "vs", "compare", or 2+ recognized entities
+        is_comparison = len(entities) >= 2 or any(term in norm_q for term in ["same", "same as", "difference", "vs", "compare", "different", "versus", "distinction", "distinct", "differ"])
+
+        # 3. Single-entity "what is X" questions:
+        is_what_is_x = False
+        if len(entities) == 1 and not is_alarm_query and not is_comparison:
+            property_keywords = [
+                "setpoint", "pressure", "voltage", "temperature", "baud", "limit",
+                "interval", "threshold", "approver", "when did", "how often",
+                "where is", "location of", "connect directly", "action is required",
+                "circumstances"
+            ]
+            has_property_kw = any(kw in norm_q for kw in property_keywords)
+            has_what_is_pattern = bool(re.search(r"\b(?:what\s+(?:is|was)|who\s+(?:is|was)|describe|explain)\b", norm_q))
+            if has_what_is_pattern and not has_property_kw:
+                is_what_is_x = True
+
+        if is_alarm_query:
+            target_alarm = alarm_entities[0]
+            target_alarm_claims = [c for c in kb.claims.values() if c.get("subject") == target_alarm and c.get("status") not in ("gap",)]
+            ordered_alarm = [c for c in top_claims if c.get("subject") == target_alarm and c.get("status") not in ("gap",)]
+            for c in target_alarm_claims:
+                if c not in ordered_alarm:
+                    ordered_alarm.append(c)
+            answer_claims = ordered_alarm if ordered_alarm else [c for c in top_claims if c.get("subject") == target_alarm]
+            related_claims = [c for c in top_claims if c not in answer_claims and not (c.get("subject", "").startswith("A") and c.get("subject", "")[1:].isdigit() and c.get("subject") != target_alarm)]
+
+        elif is_comparison and entities:
+            entity_predicates = {"component_description", "component_location", "component_alias", "sensor_replaced_by"}
+            comp_claims = []
+            # Include any claim whose subject is one of recognized entities and whose value text mentions another recognized entity
+            for c in kb.claims.values():
+                if c.get("status") in ("gap",):
+                    continue
+                subj = c.get("subject")
+                if subj in entities:
+                    val_lower = c.get("value", "").lower()
+                    if any(re.search(r"\b" + re.escape(other.lower()) + r"\b", val_lower) for other in entities if other != subj):
+                        if c not in comp_claims:
+                            comp_claims.append(c)
+
+            if predicates:
+                for c in top_claims:
+                    if c.get("predicate") in predicates and c.get("status") not in ("gap",) and c not in comp_claims:
+                        comp_claims.append(c)
+            for e in entities:
+                e_claims = [c for c in kb.claims.values() if c.get("subject") == e and c.get("predicate") in entity_predicates and c.get("status") not in ("gap",)]
+                for c in e_claims:
+                    if c not in comp_claims:
+                        comp_claims.append(c)
+            for c in top_claims:
+                if c.get("predicate") in entity_predicates and (not c.get("subject") or c.get("subject") in entities) and c not in comp_claims and c.get("status") not in ("gap",):
+                    comp_claims.append(c)
+            answer_claims = comp_claims if comp_claims else top_claims
+            related_claims = [c for c in top_claims if c not in answer_claims]
+
+        elif is_what_is_x:
+            target_entity = entities[0]
+            matching_claims = [c for c in top_claims if c.get("subject") == target_entity and c.get("status") not in ("gap",)]
+            if not matching_claims:
+                matching_claims = [c for c in kb.claims.values() if c.get("subject") == target_entity and c.get("status") not in ("gap",)]
+            answer_claims = matching_claims if matching_claims else top_claims
+            related_claims = [c for c in top_claims if c not in answer_claims]
+
+        elif predicates:
+            effective_preds = set(predicates)
+            matching_claims = [c for c in top_claims if (c.get("predicate") in effective_preds or (entities and c.get("subject") in entities and c.get("predicate", "").startswith("alarm_"))) and c.get("status") not in ("gap",)]
+            related_claims = [c for c in top_claims if c not in matching_claims]
+            answer_claims = matching_claims if matching_claims else top_claims
+        else:
+            answer_claims = top_claims
+            related_claims = []
+
+    evidence = _collect_evidence(answer_claims, predicates, entities)
 
     # ── Could not determine ──────────────────────────────────────────────────
     could_not_determine = _build_gaps(top_claims, entities, predicates, status)
 
     # ── Confidence breakdown ─────────────────────────────────────────────────
-    confidence = _build_confidence(top_claims, conflicts, text_hits)
+    confidence = _build_confidence(answer_claims, conflicts, text_hits)
 
     # ── Synthesise answer text ───────────────────────────────────────────────
     answer = _synthesize(
-        status, top_claims, text_hits, entities, predicates,
+        status, answer_claims, text_hits, entities, predicates,
         version_history, norm_q, kb=kb,
         conflict_claims_for_entities=conflict_claims_for_entities,
     )
@@ -282,7 +374,19 @@ def search(query: str, kb, version_hint: str = None) -> dict:
             "is_observed": c.get("is_observed", False),
             "score": next((s for s, cid, _ in scored if cid == c["claim_id"]), 0),
         }
-        for c in top_claims
+        for c in answer_claims
+    ]
+
+    related_claims_formatted = [
+        {
+            "claim_id": c["claim_id"],
+            "value": c["value"],
+            "predicate": c.get("predicate"),
+            "scope": scope_label(c.get("version_scope") or ""),
+            "status": c["status"],
+            "trust_tier": c.get("trust_tier", 1),
+        }
+        for c in related_claims
     ]
 
     return {
@@ -290,9 +394,11 @@ def search(query: str, kb, version_hint: str = None) -> dict:
         "normalized_query": norm_q,
         "recognized_entities": entities,
         "recognized_predicates": predicates,
+        "predicates": predicates,
         "status": status,
         "answer": answer,
         "claims_used": claims_used,
+        "related_claims": related_claims_formatted,
         "evidence": evidence,
         "conflicts": conflicts,
         "version_history": version_history,

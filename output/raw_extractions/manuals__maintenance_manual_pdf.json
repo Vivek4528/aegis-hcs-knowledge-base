@@ -1,0 +1,148 @@
+{
+  "source_file": "manuals/maintenance_manual.pdf",
+  "file_format": "pdf",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "Aegis Series-7 HCS \u2014 Maintenance Manual AEG-MM-700 Rev 3 Aegis Series-7 Hydraulic Control System Maintenance Manual Document AEG-MM-700 | Revision 3",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "1. Scope",
+      "block_type": "heading",
+      "page": 1,
+      "section": "1 Scope",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "This manual covers scheduled maintenance, alarm response, and controller behavior for the Aegis Series-7 Hydraulic Control System (HCS). It supplements, and does not replace, the Operator Manual (AEG-OM-700).",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "1 Scope",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "3. Controller Reset Conditions",
+      "block_type": "heading",
+      "page": 1,
+      "section": "3 Controller Reset Conditions",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Do NOT reset the PLC-03 controller while hydraulic pressure is above 50 bar. The controller reset routine re-initializes valve driver outputs; if the circuit is still pressurized, this can produce a momentary uncommanded actuation of Isolation Valve IV-21. Controller reset is only permitted when pressure, as reported by the active pressure sensor (PS-04 on revisions prior to 3.2, PS-04A on revision 3.2 and later), reads below 50 bar.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "3 Controller Reset Conditions",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "4. Alarm A17 Response",
+      "block_type": "heading",
+      "page": 1,
+      "section": "4 Alarm A17 Response",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Alarm A17 (Hydraulic Pressure Low) may clear on its own within a few seconds if it was triggered by a transient pressure dip during valve transition. If alarm A17 persists for more than 10 seconds, execute Shutdown Procedure 4.7 before investigating further. Do not attempt to clear a persistent A17 by silencing the alarm alone. Shutdown Procedure 4.7: close IV-21, confirm pressure decay, set POWER selector to OFF, tag out per site lockout/tagout procedure, then proceed to Section 6 (Troubleshooting).",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "4 Alarm A17 Response",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "6. Troubleshooting: Low Discharge Pressure",
+      "block_type": "heading",
+      "page": 1,
+      "section": "6 Troubleshooting: Low Discharge Pressure",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "If the HPU fails to reach normal operating pressure, check the following in order: \u2022 Isolation valve IV-21 is closed or partially closed. \u2022 Hydraulic fluid level is low. \u2022 Pressure sensor (PS-04 / PS-04A) signal is invalid or out of calibration \u2014 see Alarm A19 in the Alarm Reference.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "6 Troubleshooting: Low Discharge Pressure",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "7. Component Access",
+      "block_type": "heading",
+      "page": 1,
+      "section": "7 Component Access",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "The Hydraulic Power Pack (HPU) maintenance access panel is secured by four quarter-turn fasteners. Remove the panel only after the unit has been shut down per Section 4 and pressure has been bled per Section 8. Do not operate the unit with the panel removed.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "7 Component Access",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "9. Related Documents",
+      "block_type": "heading",
+      "page": 1,
+      "section": "9 Related Documents",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Engineering Change Notice ECN-1042 (pressure sensor replacement and setpoint change), ECN-1058 (alarm threshold correction), and the Component Register (AEG-CR-700) should be consulted alongside this manual, as component identifiers and setpoints have changed across software revisions. AEG-MM-700 Rev 3 | Page 1",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "9 Related Documents",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "page_count": 1,
+    "pdf_info": {
+      "Author": "(anonymous)",
+      "CreationDate": "D:20260926165238+00'00'",
+      "Creator": "(unspecified)",
+      "Keywords": "",
+      "ModDate": "D:20260926165238+00'00'",
+      "Producer": "ReportLab PDF Library - (opensource)",
+      "Subject": "(unspecified)",
+      "Title": "(anonymous)",
+      "Trapped": "False"
+    },
+    "parse_time_seconds": 0.07,
+    "file_notes": "AEG-MM-700 Rev 3, born-digital"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "text_extraction",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "pdfplumber parses PDF text objects directly from file structure; no OCR or ML. Deterministic: same input always gives same output."
+    },
+    {
+      "step_name": "text_normalization",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "Rule-based artifact replacement from NORMALIZATION_TABLE (\u00f9\u2192\u2014, fi\u2192\u2192, (cid:N)\u2192bullet). Deterministic mapping, no ML."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

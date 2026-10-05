@@ -1,0 +1,416 @@
+{
+  "source_file": "configuration/configuration_export.json",
+  "file_format": "json",
+  "trust_tier": 4,
+  "trust_label": "config_export",
+  "content_blocks": [
+    {
+      "text": "export_metadata.system = Aegis Series-7 HCS [terminology: system_name]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "export_metadata",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "export_metadata.controller_id = PLC-03 [terminology: component_id]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "export_metadata",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "export_metadata.firmware_version = 3.2.1 [terminology: software_revision]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "export_metadata",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "export_metadata.export_timestamp = 2026-02-03T09:14:22Z [terminology: config_export_date]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "export_metadata",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "export_metadata.export_tool = AegisConfigExport v1.4",
+      "block_type": "config_value",
+      "page": null,
+      "section": "export_metadata",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "startup_interlocks.valve_iv21_required_state = OPEN [terminology: IV-21 startup interlock state]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "startup_interlocks",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "startup_interlocks.estop_required_state = RESET [terminology: E-stop startup interlock state]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "startup_interlocks",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "startup_interlocks.maintenance_panel_required_state = CLOSED [terminology: Maintenance panel startup interlock state]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "startup_interlocks",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "startup_interlocks.fluid_level_required_band = NORMAL [terminology: Hydraulic fluid level startup interlock band]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "startup_interlocks",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "sensors.sensor_ps04a_threshold_bar = 200 [terminology: PS-04A normal operating pressure setpoint (bar)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensors",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "sensors.sensor_ps04a_alarm_low_bar = 150 [terminology: PS-04A alarm low threshold = A17 trigger (bar)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensors",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "sensors.sensor_ps04a_alarm_high_bar = 220 [terminology: PS-04A alarm high threshold = A18 trigger (bar)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensors",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "sensors.sensor_ps04a_signal_type = 4-20mA [terminology: PS-04A signal type]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensors",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "sensors.sensor_ps40_zone = coolant_loop [terminology: PS-40 zone assignment (NOT HPU discharge)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensors",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "sensors.sensor_ps40_note = unrelated to HPU discharge circuit; do not map to sensor_ps04a_* keys [terminology: PS-40 note: unrelated to HPU discharge circuit]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensors",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "alarms.A17.description = hydraulic_pressure_low",
+      "block_type": "config_value",
+      "page": null,
+      "section": "A17",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "alarms.A17.persistence_before_shutdown_seconds = 10 [terminology: alarm persistence before Shutdown Procedure 4.7 (seconds)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "A17",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "alarms.A17.shutdown_procedure_ref = 4.7 [terminology: references Shutdown Procedure section]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "A17",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "alarms.A18.description = hydraulic_pressure_high",
+      "block_type": "config_value",
+      "page": null,
+      "section": "A18",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "alarms.A18.persistence_before_shutdown_seconds = None [terminology: alarm persistence before Shutdown Procedure 4.7 (seconds)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "A18",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "alarms.A19.description = pressure_sensor_signal_invalid",
+      "block_type": "config_value",
+      "page": null,
+      "section": "A19",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "alarms.A19.persistence_before_shutdown_seconds = None [terminology: alarm persistence before Shutdown Procedure 4.7 (seconds)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "A19",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "controller_reset.min_pressure_bar_required_for_reset = None [terminology: minimum pressure for controller reset (bar)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "controller_reset",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "controller_reset.max_pressure_bar_allowed_for_reset = 50 [terminology: maximum pressure allowed for controller reset (bar)]",
+      "block_type": "config_value",
+      "page": null,
+      "section": "controller_reset",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "controller_reset.note = reset is blocked in firmware above max_pressure_bar_allowed_for_reset",
+      "block_type": "config_value",
+      "page": null,
+      "section": "controller_reset",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "revision_applicability.sensor_ps04a_threshold_bar.applies_from_firmware = 3.2",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensor_ps04a_threshold_bar",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "revision_applicability.sensor_ps04_legacy_threshold_bar.value = 180",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensor_ps04_legacy_threshold_bar",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "revision_applicability.sensor_ps04_legacy_threshold_bar.applies_before_firmware = 3.2",
+      "block_type": "config_value",
+      "page": null,
+      "section": "sensor_ps04_legacy_threshold_bar",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "ENTITY SEPARATION NOTE (from config): unrelated to HPU discharge circuit; do not map to sensor_ps04a_* keys",
+      "block_type": "note",
+      "page": null,
+      "section": "sensors",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "JSON Key",
+        "Value",
+        "Documentation Terminology"
+      ],
+      "rows": [
+        [
+          "sensor_ps04a_threshold_bar",
+          "200",
+          "PS-04A normal operating pressure setpoint (bar)"
+        ],
+        [
+          "sensor_ps04a_alarm_low_bar",
+          "150",
+          "PS-04A alarm low threshold = A17 trigger (bar)"
+        ],
+        [
+          "sensor_ps04a_alarm_high_bar",
+          "220",
+          "PS-04A alarm high threshold = A18 trigger (bar)"
+        ],
+        [
+          "sensor_ps04a_signal_type",
+          "4-20mA",
+          "PS-04A signal type"
+        ],
+        [
+          "sensor_ps40_zone",
+          "coolant_loop",
+          "PS-40 zone assignment (NOT HPU discharge)"
+        ],
+        [
+          "sensor_ps40_note",
+          "unrelated to HPU discharge circuit; do not map to sensor_ps04a_* keys",
+          "PS-40 note: unrelated to HPU discharge circuit"
+        ]
+      ],
+      "page": null,
+      "section": "sensors",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    },
+    {
+      "headers": [
+        "Alarm ID",
+        "Description",
+        "Persistence (s) Before Shutdown",
+        "Procedure Ref"
+      ],
+      "rows": [
+        [
+          "A17",
+          "hydraulic_pressure_low",
+          "10",
+          "4.7"
+        ],
+        [
+          "A18",
+          "hydraulic_pressure_high",
+          "None",
+          ""
+        ],
+        [
+          "A19",
+          "pressure_sensor_signal_invalid",
+          "None",
+          ""
+        ]
+      ],
+      "page": null,
+      "section": "alarms",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    },
+    {
+      "headers": [
+        "Config Key",
+        "Revision Applicability"
+      ],
+      "rows": [
+        [
+          "sensor_ps04a_threshold_bar",
+          "{\"applies_from_firmware\": \"3.2\"}"
+        ],
+        [
+          "sensor_ps04_legacy_threshold_bar",
+          "{\"value\": 180, \"applies_before_firmware\": \"3.2\"}"
+        ]
+      ],
+      "page": null,
+      "section": "revision_applicability",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    }
+  ],
+  "diagrams": [],
+  "structured_data": {
+    "export_metadata": {
+      "system": "Aegis Series-7 HCS",
+      "controller_id": "PLC-03",
+      "firmware_version": "3.2.1",
+      "export_timestamp": "2026-02-03T09:14:22Z",
+      "export_tool": "AegisConfigExport v1.4"
+    },
+    "startup_interlocks": {
+      "valve_iv21_required_state": "OPEN",
+      "estop_required_state": "RESET",
+      "maintenance_panel_required_state": "CLOSED",
+      "fluid_level_required_band": "NORMAL"
+    },
+    "sensors": {
+      "sensor_ps04a_threshold_bar": 200,
+      "sensor_ps04a_alarm_low_bar": 150,
+      "sensor_ps04a_alarm_high_bar": 220,
+      "sensor_ps04a_signal_type": "4-20mA",
+      "sensor_ps40_zone": "coolant_loop",
+      "sensor_ps40_note": "unrelated to HPU discharge circuit; do not map to sensor_ps04a_* keys"
+    },
+    "alarms": {
+      "A17": {
+        "description": "hydraulic_pressure_low",
+        "persistence_before_shutdown_seconds": 10,
+        "shutdown_procedure_ref": "4.7"
+      },
+      "A18": {
+        "description": "hydraulic_pressure_high",
+        "persistence_before_shutdown_seconds": null
+      },
+      "A19": {
+        "description": "pressure_sensor_signal_invalid",
+        "persistence_before_shutdown_seconds": null
+      }
+    },
+    "controller_reset": {
+      "min_pressure_bar_required_for_reset": null,
+      "max_pressure_bar_allowed_for_reset": 50,
+      "note": "reset is blocked in firmware above max_pressure_bar_allowed_for_reset"
+    },
+    "revision_applicability": {
+      "sensor_ps04a_threshold_bar": {
+        "applies_from_firmware": "3.2"
+      },
+      "sensor_ps04_legacy_threshold_bar": {
+        "value": 180,
+        "applies_before_firmware": "3.2"
+      }
+    }
+  },
+  "metadata": {
+    "top_level_keys": [
+      "export_metadata",
+      "startup_interlocks",
+      "sensors",
+      "alarms",
+      "controller_reset",
+      "revision_applicability"
+    ],
+    "parse_time_seconds": 0.002,
+    "file_notes": "PLC-03 config dump, keys differ from manual terminology"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "json_parsing",
+      "method": "json_stdlib",
+      "method_type": "deterministic",
+      "reason": "Python's json.loads() is a deterministic grammar-based parser. Key-to-terminology mapping is a hand-authored rule table derived by cross-referencing JSON keys against documentation; rule-based."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

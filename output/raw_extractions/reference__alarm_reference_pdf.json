@@ -1,0 +1,128 @@
+{
+  "source_file": "reference/alarm_reference.pdf",
+  "file_format": "pdf",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "Aegis Series-7 HCS \u2014 Alarm Reference AEG-AL-700 Rev 5 Aegis Series-7 Hydraulic Control System Alarm Reference Document AEG-AL-700 | Revision 5 (incorporates ECN-1058) Alarm Condition Panel Possible Cause(s) Required Action Indication A17 Hydraulic pressure RED 1. IV-21 closed or See Section 4 of the below 150 bar partially closed Maintenance Manual.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "2. Low hydraulic fluid If persistent > 10 s,",
+      "block_type": "heading",
+      "page": 1,
+      "section": "2 Low hydraulic fluid If persistent > 10 s,",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "3. Pressure sensor run Shutdown Proc. 4.7*",
+      "block_type": "heading",
+      "page": 1,
+      "section": "3 Pressure sensor run Shutdown Proc. 4.7*",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "signal invalid A18 Hydraulic pressure AMBER 1. Relief valve fault Stop the HPU. Do not above 220 bar 2. Setpoint restart until pressure misconfiguration relief is verified. A19 Pressure sensor RED 1. Sensor wiring fault Replace sensor per signal invalid 2. Sensor drift beyond Maintenance Manual tolerance (see ECN-1042) Section 6. * Shutdown Procedure 4.7 applies only when A17 persists beyond 10 seconds. A transient A17 that clears on its own during normal valve transition does not require Procedure 4.7 (see Maintenance Manual AEG-MM-700, Section 4). Note on sensor references: prior to Revision 5 of this document, the condition for A17 referenced sensor PS-04 by name. Per ECN-1058, the condition is evaluated against whichever pressure sensor is active for the installed software revision (PS-04 or PS-04A). The 150 bar and 220 bar thresholds shown above are unchanged by ECN-1058. AEG-AL-700 Rev 5 | Page 1",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "3 Pressure sensor run Shutdown Proc. 4.7*",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Aegis Series-7 HCS \u2014 Alarm Reference AEG-AL-700 Rev 5 Continued: Alarm Reference (AEG-AL-700) Alarms A01\u2013A16 and A20\u2013A34 (electrical, lubrication, and communications alarms) are documented in the companion Electrical Alarm Reference, AEG-AL-701, which is not part of this package. AEG-AL-700 Rev 5 | Page 2",
+      "block_type": "paragraph",
+      "page": 2,
+      "section": "3 Pressure sensor run Shutdown Proc. 4.7*",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Alarm",
+        "Condition",
+        "Panel\nIndication",
+        "Possible Cause(s)",
+        "Required Action"
+      ],
+      "rows": [
+        [
+          "A17",
+          "Hydraulic pressure\nbelow 150 bar",
+          "RED",
+          "1. IV-21 closed or\npartially closed\n2. Low hydraulic fluid\n3. Pressure sensor\nsignal invalid",
+          "See Section 4 of the\nMaintenance Manual.\nIf persistent > 10 s,\nrun Shutdown Proc. 4.7*"
+        ],
+        [
+          "A18",
+          "Hydraulic pressure\nabove 220 bar",
+          "AMBER",
+          "1. Relief valve fault\n2. Setpoint\nmisconfiguration",
+          "Stop the HPU. Do not\nrestart until pressure\nrelief is verified."
+        ],
+        [
+          "A19",
+          "Pressure sensor\nsignal invalid",
+          "RED",
+          "1. Sensor wiring fault\n2. Sensor drift beyond\ntolerance (see ECN-1042)",
+          "Replace sensor per\nMaintenance Manual\nSection 6."
+        ]
+      ],
+      "page": 1,
+      "section": "3 Pressure sensor run Shutdown Proc. 4.7*",
+      "has_merged_cells": true,
+      "has_multi_row_headers": true,
+      "confidence": 1.0
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "page_count": 2,
+    "pdf_info": {
+      "Author": "(anonymous)",
+      "CreationDate": "D:20260926165238+00'00'",
+      "Creator": "(unspecified)",
+      "Keywords": "",
+      "ModDate": "D:20260926165238+00'00'",
+      "Producer": "ReportLab PDF Library - (opensource)",
+      "Subject": "(unspecified)",
+      "Title": "(anonymous)",
+      "Trapped": "False"
+    },
+    "parse_time_seconds": 0.062,
+    "file_notes": "AEG-AL-700 Rev 5, alarm table with merged cells"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "text_extraction",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "pdfplumber parses PDF text objects directly from file structure; no OCR or ML. Deterministic: same input always gives same output."
+    },
+    {
+      "step_name": "text_normalization",
+      "method": "pdfplumber_text",
+      "method_type": "deterministic",
+      "reason": "Rule-based artifact replacement from NORMALIZATION_TABLE (\u00f9\u2192\u2014, fi\u2192\u2192, (cid:N)\u2192bullet). Deterministic mapping, no ML."
+    },
+    {
+      "step_name": "table_extraction_page_1",
+      "method": "pdfplumber_table",
+      "method_type": "rule_based",
+      "reason": "Ruled-line detection heuristic to find table cells."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

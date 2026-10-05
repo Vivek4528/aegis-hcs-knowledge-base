@@ -144,13 +144,13 @@ graph TD
         E_PLC03["PLC-03 (Main Controller)"]
     end
 
-    A1 -->|operator_manual.pdf| E_HPU
-    A2 -->|maintenance_manual.pdf| E_HPU
+    A1 -->|legacy_manual_v1.html / maintenance_manual.pdf| E_HPU
+    A2 -->|operator_manual.pdf| E_HPU
     B1 -->|component_register.xlsx| E_PS04A
-    B2 -->|screen_02.png| E_PS04A
+    B2 -->|screen_03.png| E_PS04A
     B3 -->|site_survey_notes.docx| E_PS04A
-    C1 -->|system_diagram_hydraulic.pdf| E_PLC03
-    C2 -->|wiring_diagram.pdf| E_PLC03
+    C1 -->|component_register.xlsx| E_PLC03
+    C2 -->|component_register.xlsx| E_PLC03
 ```
 
 ### 4.2 Resolving Critical Industrial Near-Homonyms
@@ -257,11 +257,13 @@ In naive evaluation benchmarks, systems report "100% Accuracy" simply by classif
   2. Contain at least 80% of required ground-truth factual entities and numbers.
   3. Cite at least one verified primary engineering source.
 
-### 8.2 The Necessity of Frozen Held-Out Adversarial Sets
-Evaluating only against queries formulated during development invites unintentional overfitting. To measure true operational robustness, the system was subjected to two frozen, held-out adversarial test suites:
-- **Development Set (23 Qs)**: 23 / 23 (100.0%) — Iteratively refined during construction.
-- **Held-Out Adversarial Set 1 (15 Qs, Frozen)**: 10 / 15 (66.7%) — Tests syntactic variance, unknown entities, and homonyms.
-- **Held-Out Adversarial Set 2 (15 Qs, Unseen Authors, Frozen)**: 11 / 15 (73.3%) — Probes boundary conditions, typos, and adversarial phrasing.
+### 8.2 The Necessity of Regression Sets & Genuinely Fresh Held-Out Sets
+Evaluating only against queries formulated during development invites unintentional overfitting. To measure true operational robustness, the system was subjected to frozen regression sets and a genuinely fresh held-out evaluation:
+- **Development Set (23 Qs)**: 23 / 23 (100.0%) — Not an accuracy estimate: claims, gold answers, and retrieval were developed together.
+- **Regression Set 1 (15 Qs, Frozen Legacy)**: 14 / 15 (93.3%) — Used for diagnosis, not held-out.
+- **Regression Set 2 (15 Qs, Frozen Legacy)**: 13 / 15 (86.7%) — Used for diagnosis, not held-out.
+- **Regression Set 3 (15 Qs, Post-Fix Regression)**: 15 / 15 (100.0%) — Written after fixes to prevent regression.
+- **Fresh Held-Out Evaluation Set (10 Qs, Run Once)**: 6 / 10 strict, 7 / 10 lenient — Genuinely unseen queries executed without tuning.
 
 ### 8.3 Ablation Theory
 By systematically disabling modules, we measure the empirical utility of each layer:
@@ -285,6 +287,9 @@ By systematically disabling modules, we measure the empirical utility of each la
 | **Phase 5** | False premise queries returning hallucinations | Querying non-existent properties (e.g. voltage of mechanical sensor) | Explicit `gap_false_premise` claim generation and keyword matching | Eval benchmark test case Q20 |
 | **Phase 6** | UI premature search execution on chip click | Clicking evaluation question chips immediately fired HTTP search | Decoupled chip click (populates input only) from explicit search button click | Manual browser & subagent verification |
 | **Phase 7** | Metric overclaiming in naive benchmarks | Equating status accuracy with semantic correctness | Compound metric enforcing status + fact score $\ge$ 0.8 + citation recall $>0$ | `eval/evaluator.py` regression runner |
+| **Phase 8** | Unknown ID hallucination on unmodeled entities | Substring/token overlap with known components (e.g. A99, XV-99) | Generic entity existence rule on candidate token patterns (`check_unknown_ids`) | `adversarial_set3.py` (15/15 PASS) |
+| **Phase 8** | False-premise queries on existing entities | Asking for unmodeled properties (e.g. reset time of A17, temp of PS-04A) | Entity + predicate validation asserting absence of property (`check_false_premise_properties`) | `adversarial_set3.py` (15/15 PASS) |
+| **Phase 8** | Diagram entity omission (`KA1`, `TB-7`, `J-14`) | Unregistered diagram symbols in E02 and W03 | Canonical claims registered with verified schematic and wiring provenance | `tests/test_retrieval.py` + Adversarial Set 3 |
 
 ---
 

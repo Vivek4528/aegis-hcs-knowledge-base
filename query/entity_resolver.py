@@ -182,6 +182,7 @@ PREDICATE_KEYWORDS = {
     "component_alias": [
         "also called", "alias", "another name", "known as",
         "same thing as", "what does", "do", "function of",
+        "sensor id", "component id", "sensor tag", "known component", "tag",
     ],
     "document_approver": [
         "who approved", "approver", "approved by", "signed off", "authorised",
@@ -200,7 +201,7 @@ PREDICATE_KEYWORDS = {
         "firmware", "what revision", "sw rev", "release date",
     ],
     "observed_pressure": [
-        "observed", "measured", "reading", "live reading", "screenshot",
+        "observed", "measured", "reading", "live reading",
     ],
     "training_slide_content": [
         "training slide", "slide deck", "training deck",
@@ -243,11 +244,12 @@ def recognize_entities(norm_query: str) -> list:
 def recognize_predicates(norm_query: str) -> list:
     """
     Return list of predicate names suggested by the query text.
+    Uses word boundaries to avoid false substring matches.
     """
     found = []
     for pred, keywords in PREDICATE_KEYWORDS.items():
         for kw in keywords:
-            if kw in norm_query:
+            if re.search(r"\b" + re.escape(kw) + r"\b", norm_query):
                 if pred not in found:
                     found.append(pred)
                 break

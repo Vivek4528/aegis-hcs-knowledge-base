@@ -1,0 +1,87 @@
+{
+  "source_file": "screenshots/screen_01_home.png",
+  "file_format": "png_screenshot",
+  "trust_tier": 4,
+  "trust_label": "config_export",
+  "content_blocks": [
+    {
+      "text": "AEGISSERIES-7HCS-HOME\nSWREV3.2\nHPUDISCHARGEPRESSURE\nSTARTUPINTERLOCKS\nOPEN\nIV-21 (IsolationValve)\n200\nRESET\nEmergency Stop\nbar\nCLOSED\nMaintenance Panel\nHydraulic Fluid Level\nNORMAL\nSTATUS:RUNNING-NORMAL\nACTIVECOMPONENTSUMMARY\nHP unit\nPLC-03 controlled\nRUNNING\nPS-04A\ndischarge pressure sensor\nOK\nIV-21\nOPEN\nisolationvalve\nTouch ALARMS for active/historical alarm list. Touch DlAGNOSTICS for sensor-level detail.",
+      "block_type": "ocr_text",
+      "page": 1,
+      "section": null,
+      "bbox": null,
+      "confidence": 0.9861
+    }
+  ],
+  "tables": [],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "image_size": "1280x800",
+    "rapidocr_items": 26,
+    "rapidocr_avg_conf": 0.9861,
+    "ocr_vs_manual_mismatch": {
+      "similarity": 0.6341,
+      "mismatch_rate": 0.3659,
+      "ocr_word_count": 56,
+      "reference_word_count": 67
+    },
+    "manual_transcription_used_as": "cross_check_only",
+    "LLM_vision_crosscheck_tables": [
+      {
+        "name": "startup_interlocks",
+        "rows": [
+          [
+            "IV-21 (Isolation Valve)",
+            "OPEN"
+          ],
+          [
+            "Emergency Stop",
+            "RESET"
+          ],
+          [
+            "Maintenance Panel",
+            "CLOSED"
+          ],
+          [
+            "Hydraulic Fluid Level",
+            "NORMAL"
+          ]
+        ]
+      }
+    ],
+    "LLM_vision_crosscheck_component_summary": [
+      [
+        "HP unit",
+        "PLC-03 controlled",
+        "RUNNING"
+      ],
+      [
+        "PS-04A",
+        "discharge pressure sensor",
+        "OK"
+      ],
+      [
+        "IV-21",
+        "isolation valve",
+        "OPEN"
+      ]
+    ],
+    "LLM_vision_crosscheck_hpu_discharge_observed": "200 bar",
+    "LLM_vision_crosscheck_sw_rev": "3.2",
+    "LLM_vision_crosscheck_note": "HPU discharge pressure 200 bar is an OBSERVED live value from HMI screenshot, not a specification. Store as observed_value predicate.",
+    "parse_time_seconds": 5.291,
+    "file_notes": "HMI home screen, SW REV 3.2"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "rapidocr_png",
+      "method": "vision_model_ocr",
+      "method_type": "model_based",
+      "reason": "RapidOCR ONNX models (DBNet + CRNN) run on the PNG image. Model-based: uses neural networks for both detection and recognition."
+    }
+  ],
+  "overall_confidence": 0.9,
+  "warnings": [],
+  "failures": []
+}

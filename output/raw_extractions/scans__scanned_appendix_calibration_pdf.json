@@ -1,0 +1,45 @@
+{
+  "source_file": "scans/scanned_appendix_calibration.pdf",
+  "file_format": "scanned_pdf",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "APPENDIXC-SENSORCALIBRATIONRECORD\nAegisSeries-7HCs(scanned fromfield servicebinder,uncontrolled copy)\nSensorTag:PS-04A\nLocation:HPU dischargeline\nCalibrationDate:2026-01-09\nTechnician:R.Okafor\nCalibrationPoints\nPoint\nReference\nReading\nResult\nZero(0%)\nObar\n0.1bar\nPASS\nMid(50%)\n100bar\n99.6bar\nPASS\nSpan(100%)\n200bar\n199.4bar\nPASS\nNote:thiscalibrationrecordsupersedesthefielddata sheetusedpriortothe\nPS-04toPS-04A sensorchange(seeECN-1042).Spanreference targetis200bar,\nconsistentwith thesoftwarerevision3.2operatingpressuresetpoint.\nPriorsensor\uff08PS-04)spanreference targetwas180bar-forhistorical\ncomparisononly.Donotusethe180barfiguretoevaluatePS-04A\nNocalibrationintervalisspecifiedforPS-o4Aonthisform;recalibration\nfrequencyshouldbeconfirmed againsttheapplicablemaintenanceschedule,\nwhichisnotincluded in thisbinder.\nSignature:\nDate:\nPage1of.1-scannedcopy.qualityvaries",
+      "block_type": "ocr_text",
+      "page": 1,
+      "section": null,
+      "bbox": null,
+      "confidence": 0.9743
+    }
+  ],
+  "tables": [],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "page_count": 1,
+    "page_1_rapidocr_avg_conf": 0.9743,
+    "page_1_rapidocr_items": 34,
+    "ocr_vs_manual_mismatch": {
+      "similarity": 0.3052,
+      "mismatch_rate": 0.6948,
+      "ocr_word_count": 82,
+      "reference_word_count": 167
+    },
+    "parse_time_seconds": 9.906,
+    "file_notes": "Scanned, skewed, needs OCR"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "rapidocr_scanned_pdf",
+      "method": "vision_model_ocr",
+      "method_type": "model_based",
+      "reason": "RapidOCR uses DBNet (text detection) + CRNN (recognition), both ONNX neural network models. Output depends on model weights \u2014 not deterministic across model versions. Rendered via PyMuPDF at 300 DPI before OCR."
+    }
+  ],
+  "overall_confidence": 0.9,
+  "warnings": [
+    "High OCR/manual mismatch rate: 0.695 \u2014 review OCR output manually"
+  ],
+  "failures": []
+}

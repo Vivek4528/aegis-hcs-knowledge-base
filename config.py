@@ -6,7 +6,22 @@ import os
 # Base paths
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 WORKSPACE_ROOT = os.path.dirname(PROJECT_ROOT)
-DATASET_ROOT = os.path.join(WORKSPACE_ROOT, "task-data", "aegis-dataset", "aegis-dataset")
+DATASET_ROOT = os.environ.get(
+    "AEGIS_DATA_DIR",
+    os.path.join(WORKSPACE_ROOT, "task-data", "aegis-dataset", "aegis-dataset")
+)
+if not os.path.exists(DATASET_ROOT):
+    candidates = [
+        os.path.join(PROJECT_ROOT, "aegis-dataset"),
+        os.path.join(PROJECT_ROOT, "task-data", "aegis-dataset", "aegis-dataset"),
+        os.path.join(PROJECT_ROOT, "..", "aegis-dataset"),
+        os.path.join(WORKSPACE_ROOT, "aegis-dataset"),
+    ]
+    for c in candidates:
+        if os.path.exists(c):
+            DATASET_ROOT = c
+            break
+
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output")
 RAW_EXTRACTIONS_DIR = os.path.join(OUTPUT_DIR, "raw_extractions")
 LOGS_DIR = os.path.join(OUTPUT_DIR, "logs")

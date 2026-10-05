@@ -1,26 +1,6 @@
 """
-Gold claims: every structured fact extracted from the Aegis corpus.
-
-Each claim is built from what the documents actually say (verified against
-pdf_dump.txt and raw extraction JSONs). Provenance is attached to every claim.
-
-Claim fields:
-  claim_id      : unique string
-  subject       : canonical entity ID
-  predicate     : ClaimPredicate value
-  value         : human-readable answer string
-  value_numeric : parsed float (if applicable)
-  value_unit    : unit string
-  status        : ClaimStatus
-  version_scope : SW revision range this applies to
-  is_legacy     : came from a superseded document section
-  is_observed   : came from HMI screenshot (not a spec)
-  evidence      : list of Evidence dicts
-  confidence    : "high" | "medium" | "low"
-  trust_tier    : 1-7
-  superseded_by : claim_id that replaces this
-  conflicts_with: list of claim_ids
-  notes         : freeform explanation
+Curated claims, written by reading the parsed extraction output.
+They are not generated automatically.
 """
 
 # Each claim is a plain dict for easy JSON serialisation.
@@ -28,7 +8,7 @@ Claim fields:
 
 CLAIMS = [
 
-    # ── Q1 — Startup interlocks ─────────────────────────────────────────────
+    # ── Startup interlocks ──────────────────────────────────────────────────
     {
         "claim_id": "CLM-001",
         "subject": "HPU",
@@ -143,7 +123,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q2 / Q16 — Normal operating pressure (current) ─────────────────────
+    # ── Current operating pressure ──────────────────────────────────────────
     {
         "claim_id": "CLM-005",
         "subject": "HPU",
@@ -156,7 +136,7 @@ CLAIMS = [
         "evidence": [
             {"source_file": "manuals/operator_manual.pdf",
              "section": "4.3 Starting the Hydraulic Power Unit", "page": 1,
-             "block_text": "Verify discharge pressure, as reported by PS-04A, reaches 200 bar. This is the normal operating pressure for software revision 3.2 and later.",
+             "block_text": "Verify discharge pressure, as reported by PS-04A, reaches 200 bar. This is the normal operating pressure for software revision 3.2 and later; see ECN-1042 for the pressure change history.",
              "trust_tier": 1, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
             {"source_file": "engineering_bulletins/ECN-1042.pdf",
@@ -175,7 +155,7 @@ CLAIMS = [
         "notes": "200 bar is NOT universal — it applies only to sw_rev >= 3.2. 180 bar was correct for earlier units.",
     },
 
-    # ── Q9 / Q18 — Legacy operating pressure ───────────────────────────────
+    # ── Legacy operating pressure ───────────────────────────────────────────
     {
         "claim_id": "CLM-006",
         "subject": "HPU",
@@ -203,7 +183,7 @@ CLAIMS = [
              "extraction_confidence": 0.95},
             {"source_file": "configuration/configuration_export.json",
              "section": "sensor_ps04_legacy_threshold_bar", "page": None,
-             "block_text": "revision_applicability.sensor_ps04_legacy_threshold_bar.value = 180, applies_before_firmware = 3.2",
+             "block_text": "revision_applicability.sensor_ps04_legacy_threshold_bar.value = 180 revision_applicability.sensor_ps04_legacy_threshold_bar.applies_before_firmware = 3.2",
              "trust_tier": 4, "extraction_method": "json_stdlib",
              "extraction_confidence": 0.95},
         ],
@@ -213,7 +193,7 @@ CLAIMS = [
         "notes": "This is the correct historical value. ECN-1042 changed it. Not a conflict — these are version-scoped.",
     },
 
-    # ── Q9 — What changed it ───────────────────────────────────────────────
+    # ── Setpoint change notice (ECN-1042) ───────────────────────────────────
     {
         "claim_id": "CLM-007",
         "subject": "HPU",
@@ -225,7 +205,7 @@ CLAIMS = [
         "evidence": [
             {"source_file": "engineering_bulletins/ECN-1042.pdf",
              "section": "1 Description of Change", "page": 1,
-             "block_text": "Alongside the sensor change, the normal HPU discharge pressure setpoint is revised from 180 bar to 200 bar. This is a deliberate process change, not a sensor calibration artifact.",
+             "block_text": "Alongside the sensor change, the normal HPU discharge pressure setpoint is revised from 180 bar to 200 bar. This is a deliberate process change, not a sensor calibration artifact: the higher setpoint improves press cycle time on Series-7 units manufactured after 2024.",
              "trust_tier": 2, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
         ],
@@ -246,7 +226,7 @@ CLAIMS = [
         "evidence": [
             {"source_file": "low_trust/site_survey_notes.docx",
              "section": "", "page": None,
-             "block_text": "Checked the gauge on the local panel and it read about 175 bar during a normal run, not 180 like the manual says.",
+             "block_text": "Checked the gauge on the local panel and it read about 175 bar during a normal run, not 180 like the manual says it should be.",
              "trust_tier": 6, "extraction_method": "python_docx",
              "extraction_confidence": 0.95},
         ],
@@ -258,7 +238,7 @@ CLAIMS = [
                  "Do NOT adopt this value — flag as unverified conflict.",
     },
 
-    # ── Q3 — Alarm A17 ─────────────────────────────────────────────────────
+    # ── Alarm A17 causes and triggers ───────────────────────────────────────
     {
         "claim_id": "CLM-008",
         "subject": "A17",
@@ -329,7 +309,7 @@ CLAIMS = [
              "extraction_confidence": 0.95},
             {"source_file": "engineering_bulletins/ECN-1058.pdf",
              "section": "1 Description of Change", "page": 1,
-             "block_text": "Alarm A17's low-pressure condition is evaluated against whichever pressure sensor is active for the installed software revision.",
+             "block_text": "Alarm A17's low-pressure condition is evaluated against whichever pressure sensor is active for the installed software revision (PS-04 prior to revision 3.2, PS-04A on revision 3.2 and later).",
              "trust_tier": 2, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
         ],
@@ -337,7 +317,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q10 — Which alarm fires below 150 bar ──────────────────────────────
+    # ── Low pressure alarm threshold (150 bar) ──────────────────────────────
     {
         "claim_id": "CLM-012",
         "subject": "A17",
@@ -388,7 +368,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q7 — A17 persistence → Shutdown Procedure 4.7 ──────────────────────
+    # ── A17 persistence and Shutdown Procedure 4.7 ──────────────────────────
     {
         "claim_id": "CLM-014",
         "subject": "A17",
@@ -410,7 +390,7 @@ CLAIMS = [
              "extraction_confidence": 0.95},
             {"source_file": "configuration/configuration_export.json",
              "section": "A17", "page": None,
-             "block_text": "alarms.A17.persistence_before_shutdown_seconds = 10, shutdown_procedure_ref = 4.7",
+             "block_text": "alarms.A17.persistence_before_shutdown_seconds = 10 [terminology: alarm persistence before Shutdown Procedure 4.7 (seconds)] alarms.A17.shutdown_procedure_ref = 4.7 [terminology: references Shutdown Procedure section]",
              "trust_tier": 4, "extraction_method": "json_stdlib",
              "extraction_confidence": 0.95},
         ],
@@ -421,14 +401,14 @@ CLAIMS = [
         "claim_id": "CLM-015",
         "subject": "A17",
         "predicate": "alarm_shutdown_procedure_ref",
-        "value": "Shutdown Procedure 4.7: close IV-21 isolation valve, confirm pressure decay, set POWER selector to OFF, tag out per site lockout/tagout, then proceed to Section 6 (Troubleshooting)",
+        "value": "Shutdown Procedure 4.7: close IV-21, confirm pressure decay, set POWER selector to OFF, tag out per site lockout/tagout procedure, then proceed to Section 6 (Troubleshooting)",
         "value_numeric": None, "value_unit": None,
         "status": "active", "version_scope": None,
         "is_legacy": False, "is_observed": False,
         "evidence": [
             {"source_file": "manuals/maintenance_manual.pdf",
              "section": "4 Alarm A17 Response", "page": 1,
-             "block_text": "Shutdown Procedure 4.7: close IV-21, confirm pressure decay, set POWER selector to OFF, tag out per site lockout/tagout procedure, then proceed to Section 6.",
+             "block_text": "Shutdown Procedure 4.7: close IV-21, confirm pressure decay, set POWER selector to OFF, tag out per site lockout/tagout procedure, then proceed to Section 6 (Troubleshooting).",
              "trust_tier": 1, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
         ],
@@ -436,7 +416,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q8 — Controller reset forbidden above 50 bar ───────────────────────
+    # ── Controller reset limit (50 bar) ─────────────────────────────────────
     {
         "claim_id": "CLM-016",
         "subject": "PLC-03",
@@ -453,7 +433,7 @@ CLAIMS = [
              "extraction_confidence": 0.95},
             {"source_file": "manuals/maintenance_manual.pdf",
              "section": "3 Controller Reset Conditions", "page": 1,
-             "block_text": "Do NOT reset the PLC-03 controller while hydraulic pressure is above 50 bar. The controller reset routine re-initializes valve driver outputs.",
+             "block_text": "Do NOT reset the PLC-03 controller while hydraulic pressure is above 50 bar. The controller reset routine re-initializes valve driver outputs; if the circuit is still pressurized, this can produce a momentary uncommanded actuation of Isolation Valve IV-21.",
              "trust_tier": 1, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
             {"source_file": "configuration/configuration_export.json",
@@ -466,7 +446,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q4 — PS-04 vs PS-04A ───────────────────────────────────────────────
+    # ── PS-04 vs PS-04A distinction ─────────────────────────────────────────
     {
         "claim_id": "CLM-017",
         "subject": "PS-04",
@@ -491,7 +471,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q5 — Which document introduced the change ──────────────────────────
+    # ── Document introducing sensor and setpoint change ─────────────────────
     {
         "claim_id": "CLM-018",
         "subject": "ECN-1042",
@@ -503,7 +483,7 @@ CLAIMS = [
         "evidence": [
             {"source_file": "engineering_bulletins/ECN-1042.pdf",
              "section": "1 Description of Change", "page": 1,
-             "block_text": "Effective software revision 3.2, pressure sensor PS-04 is replaced by pressure sensor PS-04A... normal HPU discharge pressure setpoint is revised from 180 bar to 200 bar.",
+             "block_text": "Effective software revision 3.2, pressure sensor PS-04 is replaced by pressure sensor PS-04A at the HPU discharge line. PS-04A uses an updated signal conditioning circuit and is not a form-fit-function replacement for PS-04; controller firmware must be at revision 3.2 or later to read PS-04A correctly.",
              "trust_tier": 2, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
         ],
@@ -536,7 +516,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q6 — PLC-03 direct connections ────────────────────────────────────
+    # ── PLC-03 direct connections ───────────────────────────────────────────
     {
         "claim_id": "CLM-020",
         "subject": "PLC-03",
@@ -550,7 +530,8 @@ CLAIMS = [
              "section": "Hydraulic Schematic", "page": 1,
              "block_text": "purple lines: control/signal connections to PLC-03 — PLC-03 shown connected to HPU, PS-04A, IV-21",
              "trust_tier": 1, "extraction_method": "pymupdf_vector_shapes",
-             "extraction_confidence": 0.50},
+             "extraction_confidence": 0.50, "verification": "diagram_text", "verification_matched": False},
+
         ],
         "confidence": "low", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
@@ -569,12 +550,14 @@ CLAIMS = [
              "section": "Hydraulic Schematic", "page": 1,
              "block_text": "purple lines: control/signal connections to PLC-03",
              "trust_tier": 1, "extraction_method": "pymupdf_vector_shapes",
-             "extraction_confidence": 0.50},
+             "extraction_confidence": 0.50, "verification": "diagram_text", "verification_matched": True},
+
             {"source_file": "diagrams/wiring_diagram.pdf",
              "section": "Instrumentation Wiring Diagram AEG-DWG-W03", "page": 1,
              "block_text": "PLC-03 → TB-7 → J-14 (PRESSURE XDCR = PS-04A per AEG-CR-700)",
              "trust_tier": 1, "extraction_method": "pymupdf_vector_shapes",
-             "extraction_confidence": 0.50},
+             "extraction_confidence": 0.50, "verification": "diagram_text", "verification_matched": False},
+
         ],
         "confidence": "low", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [], "notes": "",
@@ -592,18 +575,20 @@ CLAIMS = [
              "section": "Hydraulic Schematic", "page": 1,
              "block_text": "purple lines: control/signal connections to PLC-03",
              "trust_tier": 1, "extraction_method": "pymupdf_vector_shapes",
-             "extraction_confidence": 0.50},
+             "extraction_confidence": 0.50, "verification": "diagram_text", "verification_matched": True},
+
             {"source_file": "diagrams/wiring_diagram.pdf",
              "section": "Instrumentation Wiring Diagram AEG-DWG-W03", "page": 1,
              "block_text": "PLC-03 → J-15 (IV-21 SOLENOID)",
              "trust_tier": 1, "extraction_method": "pymupdf_vector_shapes",
-             "extraction_confidence": 0.50},
+             "extraction_confidence": 0.50, "verification": "diagram_text", "verification_matched": False},
+
         ],
         "confidence": "low", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q11 — IV-21 location ───────────────────────────────────────────────
+    # ── IV-21 physical location ─────────────────────────────────────────────
     {
         "claim_id": "CLM-023",
         "subject": "IV-21",
@@ -623,7 +608,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q12 — Training slides new content ─────────────────────────────────
+    # ── Training slides content ─────────────────────────────────────────────
     {
         "claim_id": "CLM-024",
         "subject": "training_slides",
@@ -635,7 +620,7 @@ CLAIMS = [
         "evidence": [
             {"source_file": "extra/training_slide_excerpt.pptx",
              "section": "Slide content", "page": None,
-             "block_text": "Training slides content referencing Auxiliary Reservoir. No new components or alarms beyond what is in the operator manual.",
+             "block_text": 'Note: "Auxiliary Reservoir" is a Line 4/5-specific configuration detail and is not covered in the standard Operator Manual.',
              "trust_tier": 5, "extraction_method": "python_pptx",
              "extraction_confidence": 0.95},
         ],
@@ -644,7 +629,7 @@ CLAIMS = [
         "notes": "Slides restate operator manual content in different wording. No novel component or alarm found.",
     },
 
-    # ── Q13 — Diagnostics screen sensor ID ────────────────────────────────
+    # ── Diagnostics screen sensor tag ───────────────────────────────────────
     {
         "claim_id": "CLM-025",
         "subject": "PS-04A",
@@ -658,7 +643,8 @@ CLAIMS = [
              "section": "Sensor Diagnostics", "page": 1,
              "block_text": "Tag: P.S.04-A | Signal Type: 4-20mA | Scaled Value: 200.3 bar | Last Calibrated: 2026-01-09",
              "trust_tier": 4, "extraction_method": "vision_model_ocr",
-             "extraction_confidence": 0.90},
+             "extraction_confidence": 0.90, "verification": "ocr_text", "verification_matched": False},
+
             {"source_file": "reference/component_register.xlsx",
              "section": "Components", "page": None,
              "block_text": "PS-04A | Known Aliases: P04A; PS04A | Active",
@@ -670,7 +656,7 @@ CLAIMS = [
         "notes": "P.S.04-A = PS-04A. Display variant only. Confirmed by screen note text.",
     },
 
-    # ── Q14 — SW revision 3.2 release date ─────────────────────────────────
+    # ── Software revision 3.2 release and changes ───────────────────────────
     {
         "claim_id": "CLM-026",
         "subject": "sw_revision_3.2",
@@ -690,7 +676,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q15 — config key mapping ───────────────────────────────────────────
+    # ── Configuration key threshold mapping ─────────────────────────────────
     {
         "claim_id": "CLM-027",
         "subject": "configuration_export.json",
@@ -707,7 +693,7 @@ CLAIMS = [
              "extraction_confidence": 0.95},
             {"source_file": "manuals/operator_manual.pdf",
              "section": "4.3 Starting the Hydraulic Power Unit", "page": 1,
-             "block_text": "Verify discharge pressure, as reported by PS-04A, reaches 200 bar. This is the normal operating pressure for software revision 3.2 and later.",
+             "block_text": "Verify discharge pressure, as reported by PS-04A, reaches 200 bar. This is the normal operating pressure for software revision 3.2 and later; see ECN-1042 for the pressure change history.",
              "trust_tier": 1, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
         ],
@@ -715,7 +701,7 @@ CLAIMS = [
         "superseded_by": None, "conflicts_with": [], "notes": "",
     },
 
-    # ── Q17 — PS-04 vs PS-40 ──────────────────────────────────────────────
+    # ── PS-04 vs PS-40 distinction ──────────────────────────────────────────
     {
         "claim_id": "CLM-028",
         "subject": "PS-40",
@@ -732,7 +718,7 @@ CLAIMS = [
              "extraction_confidence": 0.95},
             {"source_file": "configuration/configuration_export.json",
              "section": "sensors", "page": None,
-             "block_text": "sensors.sensor_ps40_zone = coolant_loop; sensors.sensor_ps40_note = unrelated to HPU discharge circuit; do not map to sensor_ps04a_* keys",
+             "block_text": "sensors.sensor_ps40_zone = coolant_loop [terminology: PS-40 zone assignment (NOT HPU discharge)] sensors.sensor_ps40_note = unrelated to HPU discharge circuit; do not map to sensor_ps04a_* keys [terminology: PS-40 note: unrelated to HPU discharge circuit]",
              "trust_tier": 4, "extraction_method": "json_stdlib",
              "extraction_confidence": 0.95},
         ],
@@ -754,12 +740,14 @@ CLAIMS = [
              "section": "Calibration Points", "page": 1,
              "block_text": "Sensor Tag: PS-04A | Calibration Date: 2026-01-09 | Technician: R. Okafor | Zero: 0.1 bar PASS | Mid: 99.6 bar PASS | Span: 199.4 bar PASS",
              "trust_tier": 1, "extraction_method": "vision_model_ocr",
-             "extraction_confidence": 0.90},
+             "extraction_confidence": 0.90, "verification": "ocr_text", "verification_matched": False},
+
             {"source_file": "screenshots/screen_03_diagnostics.png",
              "section": "Sensor Diagnostics", "page": 1,
              "block_text": "Last Calibrated: 2026-01-09 | Calibration Status: WITHIN TOLERANCE",
              "trust_tier": 4, "extraction_method": "vision_model_ocr",
-             "extraction_confidence": 0.90},
+             "extraction_confidence": 0.90, "verification": "ocr_text", "verification_matched": False},
+
         ],
         "confidence": "medium", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
@@ -780,7 +768,8 @@ CLAIMS = [
              "section": "HPU Discharge Pressure display", "page": 1,
              "block_text": "HPU DISCHARGE PRESSURE: 200 bar | STATUS: RUNNING NORMAL",
              "trust_tier": 4, "extraction_method": "vision_model_ocr",
-             "extraction_confidence": 0.90},
+             "extraction_confidence": 0.90, "verification": "ocr_text", "verification_matched": False},
+
         ],
         "confidence": "medium", "trust_tier": 4,
         "superseded_by": None, "conflicts_with": [],
@@ -799,7 +788,8 @@ CLAIMS = [
              "section": "Sensor Diagnostics", "page": 1,
              "block_text": "Scaled Value: 200.3 bar | Calibration Status: WITHIN TOLERANCE",
              "trust_tier": 4, "extraction_method": "vision_model_ocr",
-             "extraction_confidence": 0.90},
+             "extraction_confidence": 0.90, "verification": "ocr_text", "verification_matched": False},
+
         ],
         "confidence": "medium", "trust_tier": 4,
         "superseded_by": None, "conflicts_with": [],
@@ -818,7 +808,7 @@ CLAIMS = [
         "evidence": [
             {"source_file": "manuals/operator_manual.pdf",
              "section": "1 Overview", "page": 1,
-             "block_text": "Throughout Aegis documentation the Hydraulic Power Unit may also be referred to as the Hydraulic Unit or the HP unit. All three terms refer to the same physical assembly.",
+             "block_text": "Throughout Aegis documentation the Hydraulic Power Unit may also be referred to as the Hydraulic Unit or the HP unit, depending on which department produced the document. All three terms refer to the same physical assembly.",
              "trust_tier": 1, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
             {"source_file": "reference/component_register.xlsx",
@@ -866,7 +856,8 @@ CLAIMS = [
              "section": "Sensor Diagnostics", "page": 1,
              "block_text": "Tag: P.S.04-A | Signal Type: 4-20mA | Scaled Value: 200.3 bar",
              "trust_tier": 4, "extraction_method": "vision_model_ocr",
-             "extraction_confidence": 0.90},
+             "extraction_confidence": 0.90, "verification": "ocr_text", "verification_matched": False},
+
         ],
         "confidence": "medium", "trust_tier": 4,
         "superseded_by": None, "conflicts_with": [],
@@ -894,7 +885,7 @@ CLAIMS = [
         "notes": "T6 unreviewed, no date, no calibrated reference.",
     },
 
-    # ── GAPS: Q19–Q23 ──────────────────────────────────────────────────────
+    # ── Documented Gaps and False Premises ──────────────────────────────────
     {
         "claim_id": "CLM-GAP-001",
         "subject": "PS-04A",
@@ -906,13 +897,13 @@ CLAIMS = [
         "evidence": [],
         "confidence": "high", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
-        "notes": "Q19 is unanswerable from available sources.",
+        "notes": "Unanswerable from available sources.",
     },
     {
         "claim_id": "CLM-GAP-002",
         "subject": "voltage_sensor",
         "predicate": "calibration_interval",
-        "value": "GAP + FALSE PREMISE: No voltage sensor is identified in the electrical diagram (AEG-DWG-E02) or any other source. The electrical schematic shows power distribution (Q1 480V disconnect, T1 480:120V transformer, 24VDC supplies) — not instrumentation sensors. Searched all 20 files for 'voltage', 'VT', 'V sensor' — zero hits for any voltage measurement sensor. Q20 may have a false premise.",
+        "value": "GAP + FALSE PREMISE: No voltage sensor is identified in the electrical diagram (AEG-DWG-E02) or any other source. The electrical schematic shows power distribution (Q1 480V disconnect, T1 480:120V transformer, 24VDC supplies) — not instrumentation sensors. Searched all 20 files for 'voltage', 'VT', 'V sensor' — zero hits for any voltage measurement sensor. This question may have a false premise.",
         "value_numeric": None, "value_unit": None,
         "status": "gap", "version_scope": None,
         "is_legacy": False, "is_observed": False,
@@ -921,11 +912,12 @@ CLAIMS = [
              "section": "Electrical Schematic AEG-DWG-E02", "page": 1,
              "block_text": "Components: Q1 (Main Disconnect), T1 (480:120V), PLC-03 24VDC PSU, PLC-03 I/O Rack, KA1 (E-Stop Relay), Sensor Loop Power 24VDC, IV-21 Valve Driver. NO voltage sensor present.",
              "trust_tier": 1, "extraction_method": "vision_model_ocr",
-             "extraction_confidence": 0.90},
+             "extraction_confidence": 0.90, "verification": "ocr_text", "verification_matched": False},
+
         ],
         "confidence": "high", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
-        "notes": "Q20 is unanswerable. The question may have a false premise.",
+        "notes": "Unanswerable. The question may have a false premise.",
     },
     {
         "claim_id": "CLM-GAP-003",
@@ -938,13 +930,13 @@ CLAIMS = [
         "evidence": [
             {"source_file": "engineering_bulletins/ECN-1058.pdf",
              "section": "ECN-1058 header", "page": 1,
-             "block_text": "ECN-1058 | Title: Alarm A17 Threshold Reference Correction | Effective: Immediately | Status: Released",
+             "block_text": "ECN Number: ECN-1058 Title: Alarm A17 Threshold Reference Correction Effective: Immediately upon publication References: ECN-1042 Status: Released",
              "trust_tier": 2, "extraction_method": "pdfplumber_text",
              "extraction_confidence": 0.95},
         ],
         "confidence": "high", "trust_tier": 2,
         "superseded_by": None, "conflicts_with": [],
-        "notes": "Q21 is unanswerable from available sources.",
+        "notes": "Unanswerable from available sources.",
     },
     {
         "claim_id": "CLM-GAP-004",
@@ -957,7 +949,7 @@ CLAIMS = [
         "evidence": [],
         "confidence": "high", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
-        "notes": "Q22 is unanswerable from available sources.",
+        "notes": "Unanswerable from available sources.",
     },
     {
         "claim_id": "CLM-GAP-005",
@@ -972,11 +964,12 @@ CLAIMS = [
              "section": "Electrical Schematic AEG-DWG-E02", "page": 1,
              "block_text": "Q1: Main Disconnect — 480V incoming",
              "trust_tier": 1, "extraction_method": "vision_model_ocr",
-             "extraction_confidence": 0.90},
+             "extraction_confidence": 0.90, "verification": "ocr_text", "verification_matched": False},
+
         ],
         "confidence": "high", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
-        "notes": "Q23 is unanswerable from available sources. Only 480V mentioned.",
+        "notes": "Unanswerable from available sources. Only 480V mentioned.",
     },
 
     # ── KA1 — E-Stop Safety Relay (AEG-DWG-E02) ───────────────────────────
@@ -995,7 +988,8 @@ CLAIMS = [
              "block_text": "E-STOP SAFETY RELAY KA1 connects to PLC-03 I/O RACK (signal / interlock)",
              "trust_tier": 1, "extraction_method": "diagram_label_inference",
              "inferred": True,
-             "extraction_confidence": 0.95},
+             "extraction_confidence": 0.95, "verification": "ocr_text", "verification_matched": False},
+
         ],
         "confidence": "high", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
@@ -1018,7 +1012,8 @@ CLAIMS = [
              "block_text": "TB-7 terminal block: feeds pressure transducer loop, pin J-14 connects to PS-04A",
              "trust_tier": 1, "extraction_method": "diagram_label_inference",
              "inferred": True,
-             "extraction_confidence": 0.95},
+             "extraction_confidence": 0.95, "verification": "diagram_text", "verification_matched": False},
+
         ],
         "confidence": "high", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
@@ -1041,43 +1036,14 @@ CLAIMS = [
              "block_text": "J-14 wiring reference terminates at PS-04A via terminal block TB-7",
              "trust_tier": 1, "extraction_method": "diagram_label_inference",
              "inferred": True,
-             "extraction_confidence": 0.95},
+             "extraction_confidence": 0.95, "verification": "diagram_text", "verification_matched": False},
+
         ],
         "confidence": "high", "trust_tier": 1,
         "superseded_by": None, "conflicts_with": [],
         "notes": "Appears in AEG-DWG-W03",
     },
 ]
-
-
-def get_claims_for_question(q_num: int) -> list:
-    """Return claim IDs relevant to a given evaluation question number."""
-    Q_MAP = {
-        1:  ["CLM-001", "CLM-002", "CLM-003", "CLM-004"],
-        2:  ["CLM-005", "CLM-006", "CLM-030"],
-        3:  ["CLM-008", "CLM-009", "CLM-010", "CLM-011"],
-        4:  ["CLM-017"],
-        5:  ["CLM-018"],
-        6:  ["CLM-020", "CLM-021", "CLM-022"],
-        7:  ["CLM-014", "CLM-015"],
-        8:  ["CLM-016"],
-        9:  ["CLM-006", "CLM-007"],
-        10: ["CLM-012"],
-        11: ["CLM-023"],
-        12: ["CLM-024"],
-        13: ["CLM-025"],
-        14: ["CLM-026"],
-        15: ["CLM-027"],
-        16: ["CLM-005"],
-        17: ["CLM-028"],
-        18: ["CLM-006"],
-        19: ["CLM-GAP-001"],
-        20: ["CLM-GAP-002"],
-        21: ["CLM-GAP-003"],
-        22: ["CLM-GAP-004"],
-        23: ["CLM-GAP-005"],
-    }
-    return Q_MAP.get(q_num, [])
 
 
 CONFLICTS = [
@@ -1116,12 +1082,45 @@ CONFLICTS = [
 ]
 
 GAPS = [
-    {"gap_id": "GAP-001", "reference": "Section 8", "description": "Manual bleed procedure not included", "affects_questions": [8]},
-    {"gap_id": "GAP-002", "reference": "AEG-AL-701", "description": "Electrical alarm reference not in package", "affects_questions": []},
-    {"gap_id": "GAP-003", "reference": "PS-04A calibration interval", "description": "Not specified in any source", "affects_questions": [20]},
-    {"gap_id": "GAP-004", "reference": "Voltage sensor / Q20 premise", "description": "No voltage sensor in package", "affects_questions": [20]},
-    {"gap_id": "GAP-005", "reference": "PS-04A operating temperature", "description": "Not in any source", "affects_questions": [19]},
-    {"gap_id": "GAP-006", "reference": "ECN-1058 approver", "description": "Not named in document", "affects_questions": [21]},
-    {"gap_id": "GAP-007", "reference": "IV-21 MTBF", "description": "Not in any source", "affects_questions": [22]},
-    {"gap_id": "GAP-008", "reference": "400V supply compatibility", "description": "Not in any source; 480V mentioned", "affects_questions": [23]},
+    {"gap_id": "GAP-001", "reference": "Section 8", "description": "Manual bleed procedure not included"},
+    {"gap_id": "GAP-002", "reference": "AEG-AL-701", "description": "Electrical alarm reference not in package"},
+    {"gap_id": "GAP-003", "reference": "PS-04A calibration interval", "description": "Not specified in any source"},
+    {"gap_id": "GAP-004", "reference": "Voltage sensor premise", "description": "No voltage sensor in package"},
+    {"gap_id": "GAP-005", "reference": "PS-04A operating temperature", "description": "Not in any source"},
+    {"gap_id": "GAP-006", "reference": "ECN-1058 approver", "description": "Not named in document"},
+    {"gap_id": "GAP-007", "reference": "IV-21 MTBF", "description": "Not in any source"},
+    {"gap_id": "GAP-008", "reference": "400V supply compatibility", "description": "Not in any source; 480V mentioned"},
 ]
+
+
+def get_claims_for_question(question_num: int) -> list:
+    """Return claim IDs relevant to evaluation question (1-23)."""
+    return QUESTION_MAP.get(question_num, [])
+
+
+QUESTION_MAP = {
+    1:  ["CLM-001", "CLM-002", "CLM-003", "CLM-004"],
+    2:  ["CLM-005"],
+    3:  ["CLM-006", "CLM-007"],
+    4:  ["CLM-008", "CLM-009", "CLM-010"],
+    5:  ["CLM-011", "CLM-012", "CLM-013"],
+    6:  ["CLM-014"],
+    7:  ["CLM-015"],
+    8:  ["CLM-016"],
+    9:  ["CLM-017"],
+    10: ["CLM-018"],
+    11: ["CLM-019"],
+    12: ["CLM-020"],
+    13: ["CLM-021", "CLM-022", "CLM-023", "CLM-024"],
+    14: ["CLM-026"],
+    15: ["CLM-027"],
+    16: ["CLM-028"],
+    17: ["CLM-029"],
+    18: ["CLM-030"],
+    19: ["CLM-GAP-001"],
+    20: ["CLM-GAP-002"],
+    21: ["CLM-GAP-003"],
+    22: ["CLM-GAP-004"],
+    23: ["CLM-GAP-005"],
+}
+

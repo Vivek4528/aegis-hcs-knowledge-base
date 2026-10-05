@@ -1,0 +1,92 @@
+{
+  "source_file": "screenshots/screen_02_alarms.png",
+  "file_format": "png_screenshot",
+  "trust_tier": 4,
+  "trust_label": "config_export",
+  "content_blocks": [
+    {
+      "text": "AEGISSERIES-7HCS-ALARMLIST\nSWREV3.2\n#\nTAG\nDESCRIPTION\nSTATE\nTIME\n1\nA17\nHydraulic Pressure Low\nCLEARED\n08:14:02\n2\nA19\nPressure Sensor Signal Invalid\nCLEARED\n03-11 22:40\nA17\nHydraulic Pressure Low\nACTIVE\n08:14:57\nA18\nHydraulic Pressure High\nINACTIVE\nAlarmA17activefor00:00:14-ShutdownProcedure4.7threshold:00:00:10",
+      "block_type": "ocr_text",
+      "page": 1,
+      "section": null,
+      "bbox": null,
+      "confidence": 0.9898
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "#",
+        "TAG",
+        "DESCRIPTION",
+        "STATE",
+        "TIME"
+      ],
+      "rows": [
+        [
+          "1",
+          "A17",
+          "Hydraulic Pressure Low",
+          "CLEARED",
+          "08:14:02"
+        ],
+        [
+          "2",
+          "A19",
+          "Pressure Sensor Signal Invalid",
+          "CLEARED",
+          "03-11 22:40"
+        ],
+        [
+          "3",
+          "A17",
+          "Hydraulic Pressure Low",
+          "ACTIVE",
+          "08:14:57"
+        ],
+        [
+          "4",
+          "A18",
+          "Hydraulic Pressure High",
+          "INACTIVE",
+          "--"
+        ]
+      ],
+      "page": 1,
+      "section": null,
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 0.92
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "image_size": "1280x800",
+    "rapidocr_items": 25,
+    "rapidocr_avg_conf": 0.9898,
+    "ocr_vs_manual_mismatch": {
+      "similarity": 0.7544,
+      "mismatch_rate": 0.2456,
+      "ocr_word_count": 50,
+      "reference_word_count": 64
+    },
+    "manual_transcription_used_as": "cross_check_only",
+    "LLM_vision_crosscheck_sw_rev": "3.2",
+    "LLM_vision_crosscheck_a17_active_duration": "14 seconds",
+    "LLM_vision_crosscheck_a17_shutdown_threshold": "10 seconds",
+    "parse_time_seconds": 4.339,
+    "file_notes": "HMI alarm list screen"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "rapidocr_png",
+      "method": "vision_model_ocr",
+      "method_type": "model_based",
+      "reason": "RapidOCR ONNX models (DBNet + CRNN) run on the PNG image. Model-based: uses neural networks for both detection and recognition."
+    }
+  ],
+  "overall_confidence": 0.9,
+  "warnings": [],
+  "failures": []
+}

@@ -1,0 +1,218 @@
+{
+  "source_file": "manuals/legacy_manual_v1.html",
+  "file_format": "html",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "Exported from the legacy Aegis documentation CMS on 2024-03-01. This isRevision 1of the\n Operator Manual. A newer manual (AEG-OM-700, current revision) supersedes most of this content\n as of software revision 3.2 \u2014 see the Engineering Change Notices in this package before\n relying on any figure below.",
+      "block_type": "notice",
+      "page": 1,
+      "section": null,
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Aegis Series-7 Hydraulic Control System \u2014 Operator Manual",
+      "block_type": "heading",
+      "page": 1,
+      "section": "Aegis Series-7 Hydraulic Control System \u2014 Operator Manual",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Document AEG-OM-700, Revision 1 (superseded). Applies to software revisions 3.0 and 3.1 only.",
+      "block_type": "metadata",
+      "page": 1,
+      "section": "Aegis Series-7 Hydraulic Control System \u2014 Operator Manual",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "1. Overview",
+      "block_type": "heading",
+      "page": 1,
+      "section": "1. Overview",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "The Aegis Series-7 Hydraulic Control System provides closed-loop hydraulic pressure regulation\nfor industrial press lines. The system is built around the Hydraulic Power Pack, which supplies\npressurized fluid to the press circuit under the supervision of the Aegis Controller.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "1. Overview",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "2. Key Components",
+      "block_type": "heading",
+      "page": 1,
+      "section": "2. Key Components",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "4. Starting the Hydraulic Power Pack",
+      "block_type": "heading",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Before starting, verify:",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Hydraulic fluid level is within the normal band.",
+      "block_type": "list_item",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Isolation valve IV-21 is open.",
+      "block_type": "list_item",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Emergency stop is reset.",
+      "block_type": "list_item",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "WARNING:Do not start the unit with the maintenance access panel removed.",
+      "block_type": "warning",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "1. Turn the POWER selector to ON.",
+      "block_type": "ordered_list_item",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "2. Press START.",
+      "block_type": "ordered_list_item",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "3. Verify pressure reaches180 bar.",
+      "block_type": "ordered_list_item",
+      "page": 1,
+      "section": "4. Starting the Hydraulic Power Pack",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "5. Normal Operating Ranges",
+      "block_type": "heading",
+      "page": 1,
+      "section": "5. Normal Operating Ranges",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Normal HPU discharge pressure is 180 bar, as measured by pressure sensor PS-04.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "5. Normal Operating Ranges",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "6. Alarms",
+      "block_type": "heading",
+      "page": 1,
+      "section": "6. Alarms",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "See the Aegis Alarm Reference for alarm A17 (Hydraulic Pressure Low) and related codes.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "6. Alarms",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "This legacy export does not reflect ECN-1042 (PS-04 to PS-04A sensor change and pressure setpoint\nupdate to 200 bar, effective software revision 3.2) or ECN-1058. Do not use this document as the\nsole reference for units running software revision 3.2 or later.",
+      "block_type": "metadata",
+      "page": 1,
+      "section": "6. Alarms",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Reference",
+        "Component",
+        "Function"
+      ],
+      "rows": [
+        [
+          "Hydraulic Power Pack",
+          "Hydraulic Power Pack (HPU)",
+          "Generates and regulates hydraulic pressure"
+        ],
+        [
+          "IV-21",
+          "Isolation Valve 21",
+          "Isolates the HPU from the press circuit"
+        ],
+        [
+          "PS-04",
+          "Pressure Sensor 04",
+          "Reports HPU discharge pressure to the controller"
+        ]
+      ],
+      "page": 1,
+      "section": "2. Key Components",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "title": "Aegis Series-7 Hydraulic Control System - Operator Manual (v1, legacy export)",
+    "normalization_artifacts_fixed": 1,
+    "parse_time_seconds": 0.023,
+    "file_notes": "AEG-OM-700 Rev 1, SUPERSEDED by Rev 4 for sw >= 3.2"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "html_parsing",
+      "method": "beautifulsoup_html",
+      "method_type": "deterministic",
+      "reason": "BeautifulSoup parses the HTML DOM tree deterministically. No ML or heuristics \u2014 pure structural parsing of markup."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

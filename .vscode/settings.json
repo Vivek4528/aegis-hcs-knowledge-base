@@ -1,5 +1,5 @@
 {
-    "python.defaultInterpreterPath": "C:\\Users\\vivek\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "python.defaultInterpreterPath": "python",
     "python.analysis.extraPaths": [
         "${workspaceFolder}",
         "${workspaceFolder}/query",

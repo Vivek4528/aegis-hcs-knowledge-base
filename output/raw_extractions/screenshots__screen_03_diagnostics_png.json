@@ -1,0 +1,89 @@
+{
+  "source_file": "screenshots/screen_03_diagnostics.png",
+  "file_format": "png_screenshot",
+  "trust_tier": 4,
+  "trust_label": "config_export",
+  "content_blocks": [
+    {
+      "text": "AEGISSERIES-7HCS-DIAGNOSTICS\nSW REV3.2\nSENSORDIAGNOSTICS\nTag\nP.S.04-A\n Signal Type\n4-20mA\nRaw Reading\n14.8 mA\n200.3 bar\nScaled Value\nCalibrationStatus\nWITHINTOLERANCE\n2026-01-09\nLastCalibrated\nFirmware Rev.\n3.2.1\nNote: this screen displays the sensor tag as printed on the physical unit label.",
+      "block_type": "ocr_text",
+      "page": 1,
+      "section": null,
+      "bbox": null,
+      "confidence": 0.9859
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Field",
+        "Value"
+      ],
+      "rows": [
+        [
+          "Tag",
+          "P.S.04-A"
+        ],
+        [
+          "Signal Type",
+          "4-20 mA"
+        ],
+        [
+          "Raw Reading",
+          "14.8 mA"
+        ],
+        [
+          "Scaled Value",
+          "200.3 bar"
+        ],
+        [
+          "Calibration Status",
+          "WITHIN TOLERANCE"
+        ],
+        [
+          "Last Calibrated",
+          "2026-01-09"
+        ],
+        [
+          "Firmware Rev.",
+          "3.2.1"
+        ]
+      ],
+      "page": 1,
+      "section": null,
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 0.95
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "image_size": "1280x800",
+    "rapidocr_items": 18,
+    "rapidocr_avg_conf": 0.9859,
+    "ocr_vs_manual_mismatch": {
+      "similarity": 0.7455,
+      "mismatch_rate": 0.2545,
+      "ocr_word_count": 51,
+      "reference_word_count": 59
+    },
+    "manual_transcription_used_as": "cross_check_only",
+    "LLM_vision_crosscheck_sw_rev": "3.2",
+    "LLM_vision_crosscheck_sensor_tag_display": "P.S.04-A",
+    "LLM_vision_crosscheck_note": "Tag displayed as P.S.04-A (physical unit label format). Scaled value 200.3 bar is OBSERVED live value, not specification. Last calibrated 2026-01-09 per screen; matches calibration record.",
+    "parse_time_seconds": 4.456,
+    "file_notes": "HMI diagnostics, sensor tag P.S.04-A"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "rapidocr_png",
+      "method": "vision_model_ocr",
+      "method_type": "model_based",
+      "reason": "RapidOCR ONNX models (DBNet + CRNN) run on the PNG image. Model-based: uses neural networks for both detection and recognition."
+    }
+  ],
+  "overall_confidence": 0.9,
+  "warnings": [],
+  "failures": []
+}

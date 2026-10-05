@@ -1,0 +1,113 @@
+{
+  "source_file": "reference/terminology_glossary.docx",
+  "file_format": "docx",
+  "trust_tier": 1,
+  "trust_label": "official_manual",
+  "content_blocks": [
+    {
+      "text": "Aegis Series-7 HCS \u2014 Terminology Glossary",
+      "block_type": "heading",
+      "page": 1,
+      "section": "Aegis Series-7 HCS \u2014 Terminology Glossary",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Document AEG-GL-700 | Revision 2 | Maintained by Technical Documentation",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Aegis Series-7 HCS \u2014 Terminology Glossary",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "This glossary lists officially defined terms used across Aegis Series-7 documentation. It is maintained separately from individual manuals and is not guaranteed to be updated at the same time as new Engineering Change Notices. Terms not listed here may still appear in other documents \u2014 absence from this glossary does not mean a term is invalid.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Aegis Series-7 HCS \u2014 Terminology Glossary",
+      "bbox": null,
+      "confidence": 1.0
+    },
+    {
+      "text": "Note: this revision of the glossary does not yet include an entry for \"HP unit\" (used informally in the Operator Manual and training materials) or for the superseded sensor \"PS-04\". Readers should not assume a term's absence here means it refers to something different from a listed term \u2014 cross-check against the Component Register.",
+      "block_type": "paragraph",
+      "page": 1,
+      "section": "Aegis Series-7 HCS \u2014 Terminology Glossary",
+      "bbox": null,
+      "confidence": 1.0
+    }
+  ],
+  "tables": [
+    {
+      "headers": [
+        "Term",
+        "Definition"
+      ],
+      "rows": [
+        [
+          "Hydraulic Power Unit (HPU)",
+          "The assembly that generates and regulates hydraulic pressure for the press circuit. See also: Hydraulic Unit."
+        ],
+        [
+          "Hydraulic Unit",
+          "Informal short form of Hydraulic Power Unit, used interchangeably in some maintenance documentation."
+        ],
+        [
+          "Isolation Valve (IV-21)",
+          "The valve isolating the HPU from the downstream press circuit. Must be open before HPU startup."
+        ],
+        [
+          "PLC-03",
+          "The HCS Controller; supervises startup sequencing, alarm evaluation, and interlocks."
+        ],
+        [
+          "Pressure Sensor 04A (PS-04A)",
+          "The HPU discharge pressure transducer used on software revision 3.2 and later."
+        ],
+        [
+          "Alarm",
+          "A system-generated notification indicating an out-of-tolerance or fault condition. See the Alarm Reference for the current alarm list."
+        ],
+        [
+          "Setpoint",
+          "A configured target value (e.g. normal operating pressure) against which a live measurement is compared."
+        ],
+        [
+          "Engineering Change Notice (ECN)",
+          "A controlled document describing an approved change to equipment, software, or documentation."
+        ],
+        [
+          "Software Revision",
+          "The version identifier for HCS controller firmware, e.g. 3.2. Governs which components and setpoints are applicable."
+        ]
+      ],
+      "page": null,
+      "section": "Aegis Series-7 HCS \u2014 Terminology Glossary",
+      "has_merged_cells": false,
+      "has_multi_row_headers": false,
+      "confidence": 1.0
+    }
+  ],
+  "diagrams": [],
+  "structured_data": null,
+  "metadata": {
+    "style_1": "Title",
+    "style_2": "",
+    "style_3": "",
+    "style_4": "",
+    "normalization_artifacts_fixed": 2,
+    "parse_time_seconds": 0.015,
+    "file_notes": "AEG-GL-700 Rev 2, INCOMPLETE (missing HP unit, PS-04)"
+  },
+  "extraction_steps": [
+    {
+      "step_name": "docx_parsing",
+      "method": "python_docx",
+      "method_type": "deterministic",
+      "reason": "python-docx reads paragraph and table content from the OOXML (XML-based) document structure. No ML or heuristics \u2014 deterministic extraction of text, styles, and table cell contents."
+    }
+  ],
+  "overall_confidence": 0.95,
+  "warnings": [],
+  "failures": []
+}

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aegis Series-7 HCS — Knowledge Base</title>
+  <meta name="description" content="Retrieval-based Q&A interface for the Aegis Series-7 Hydraulic Control System knowledge base."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #080c14;
+      --surf:     #0f1729;
+      --surf2:    #162035;
+      --surf3:    #1c2a45;
+      --border:   #1e2e4a;
+      --accent:   #3b82f6;
+      --accent2:  #6366f1;
+      --green:    #10b981;
+      --amber:    #f59e0b;
+      --red:      #ef4444;
+      --muted:    #4a5d80;
+      --text:     #e2e8f0;
+      --text2:    #8899bb;
+      --mono:     'JetBrains Mono', monospace;
+      --r:        10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #0d1a30 0%, #111831 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 58px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .logo { width: 34px; height: 34px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 7px; display: grid; place-items: center; font-weight: 700; font-size: 13px; color: #fff; flex-shrink: 0; }
+    .brand { font-weight: 600; font-size: 0.95rem; }
+    .brand span { color: var(--text2); font-weight: 400; font-size: 0.8rem; margin-left: 6px; }
+
+    /* ── Tabs ── */
+    .tabs { margin-left: auto; display: flex; gap: 2px; }
+    .tab-btn {
+      padding: 6px 16px; border-radius: 6px; font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; border: none; background: transparent; color: var(--text2);
+      transition: background 0.15s, color 0.15s;
+    }
+    .tab-btn.active { background: rgba(59,130,246,0.15); color: var(--accent); }
+    .tab-btn:hover:not(.active) { background: var(--surf2); color: var(--text); }
+
+    /* ── Tab panels ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Query panel ── */
+    #panel-query { max-width: 900px; margin: 0 auto; padding: 32px 24px 60px; }
+
+    .search-wrap { position: relative; margin-bottom: 20px; }
+    .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 1.1rem; pointer-events: none; }
+    #search-input {
+      width: 100%; padding: 16px 16px 16px 48px;
+      background: var(--surf); border: 1px solid var(--border); border-radius: var(--r);
+      color: var(--text); font-family: 'Inter', sans-serif; font-size: 1rem;
+      outline: none; transition: border 0.15s;
+    }
+    #search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    #search-input::placeholder { color: var(--muted); }
+    #search-btn {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      background: var(--accent); color: white; border: none; border-radius: 7px;
+      padding: 8px 18px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      transition: background 0.15s;
+    }
+    #search-btn:hover { background: #2563eb; }
+
+    /* ── Example chips ── */
+    .chips-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); margin-bottom: 10px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; }
+    .chip {
+      padding: 5px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 500;
+      cursor: pointer; border: 1px solid var(--border); background: var(--surf);
+      color: var(--text2); transition: all 0.15s; white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; max-width: 280px;
+    }
+    .chip:hover { background: var(--surf2); border-color: var(--accent); color: var(--text); }
+
+    /* ── Loading indicator ── */
+    .loading { display: none; text-align: center; padding: 40px; color: var(--text2); font-size: 0.9rem; }
+    .loading.show { display: block; }
+    .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 10px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Result card ── */
+    #result { animation: fadeUp 0.2s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .result-header { margin-bottom: 20px; }
+    .result-q { font-size: 1.15rem; font-weight: 700; line-height: 1.4; margin-bottom: 10px; }
+    .badge-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .badge {
+      padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .b-answered { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+    .b-gap      { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+    .b-fp       { background: rgba(239,68,68,0.10);  color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .b-conflict { background: rgba(168,85,247,0.12); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
+    .b-partial  { background: rgba(245,158,11,0.10); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+    .b-notfound { background: rgba(239,68,68,0.08);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+    .b-high   { background: rgba(16,185,129,0.07);  color: #6ee7b7; border: 1px solid rgba(16,185,129,0.2); font-size: 0.65rem; }
+    .b-medium { background: rgba(245,158,11,0.07);  color: #fde68a; border: 1px solid rgba(245,158,11,0.2); font-size: 0.65rem; }
+    .b-low    { background: rgba(239,68,68,0.07);   color: #fca5a5; border: 1px solid rgba(239,68,68,0.2);  font-size: 0.65rem; }
+
+    /* ── Sections ── */
+    .section {
+      background: var(--surf); border: 1px solid var(--border); border-radius: var(--r);
+      margin-bottom: 12px; overflow: hidden;
+    }
+    .section-head {
+      padding: 12px 16px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text2); display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-body { padding: 16px; }
+
+    /* Answer text */
+    .answer-text { font-size: 0.9rem; line-height: 1.8; white-space: pre-wrap; color: var(--text); }
+
+    /* Claims table */
+    .claims-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .claims-table th { text-align: left; color: var(--text2); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .claims-table td { padding: 7px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+    .claims-table tr:last-child td { border-bottom: none; }
+    .claim-id { font-family: var(--mono); font-size: 0.68rem; color: var(--accent); }
+    .scope-tag { font-size: 0.65rem; color: var(--amber); background: rgba(245,158,11,0.1); padding: 1px 5px; border-radius: 3px; }
+    .obs-tag   { font-size: 0.65rem; color: var(--muted); background: rgba(255,255,255,0.04); padding: 1px 5px; border-radius: 3px; }
+    .trust-tag { font-size: 0.65rem; font-family: var(--mono); }
+    .t1 { color: #34d399; } .t2 { color: #60a5fa; } .t4 { color: #a78bfa; }
+    .t5 { color: #f9a8d4; } .t6 { color: #fb923c; }
+
+    /* Evidence cards */
+    .ev-card { background: var(--surf2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+    .ev-card:last-child { margin-bottom: 0; }
+    .ev-file { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); margin-bottom: 3px; }
+    .ev-loc  { font-size: 0.7rem; color: var(--text2); margin-bottom: 6px; }
+    .ev-snippet { font-size: 0.8rem; line-height: 1.5; color: var(--text); border-left: 2px solid var(--accent); padding-left: 10px; }
+    .ev-meta { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .ev-tag  { font-size: 0.62rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.04); color: var(--text2); }
+
+    /* Conflicts & version history */
+    .vh-row { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.8rem; }
+    .vh-row:last-child { border-bottom: none; }
+    .vh-scope { min-width: 140px; font-size: 0.7rem; color: var(--amber); font-family: var(--mono); }
+    .vh-val   { flex: 1; color: var(--text); }
+    .vh-status{ font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; }
+    .vh-active     { background: rgba(16,185,129,0.1); color: #34d399; }
+    .vh-legacy     { background: rgba(245,158,11,0.1); color: #fbbf24; }
+    .vh-superseded { background: rgba(100,116,139,0.15); color: #94a3b8; text-decoration: line-through; }
+    .vh-conflict   { background: rgba(239,68,68,0.1); color: #f87171; }
+    .vh-observed   { background: rgba(168,85,247,0.1); color: #c084fc; }
+
+    .conf-block { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem; }
+    .conf-row { background: var(--surf2); border: 1px solid var(--border); border-radius: 7px; padding: 10px 12px; }
+    .conf-key { font-size: 0.65rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+    .conf-val { color: var(--text); line-height: 1.4; }
+
+    /* Could not determine */
+    .gap-block { background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.15); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; font-size: 0.8rem; }
+    .gap-block:last-child { margin-bottom: 0; }
+    .gap-searched { color: var(--text2); margin-bottom: 4px; }
+    .gap-missing  { color: #f87171; }
+
+    /* ── Eval panel ── */
+    #panel-eval { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+    .eval-meta { font-size: 0.78rem; color: var(--text2); margin-bottom: 24px; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 28px; }
+    .metric-card { background: var(--surf); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; }
+    .metric-num  { font-size: 1.6rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .metric-lbl  { font-size: 0.72rem; color: var(--text2); }
+    .mn-green { color: var(--green); } .mn-amber { color: var(--amber); } .mn-blue { color: var(--accent); }
+
+    .eval-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .eval-table th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text2); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .eval-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .eval-table tr:hover td { background: var(--surf2); }
+    .ok-yes { color: var(--green); font-weight: 600; }
+    .ok-no  { color: var(--red);   font-weight: 600; }
+    .q-text-cell { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text2); font-size: 0.72rem; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">A7</div>
+  <div class="brand">Aegis Series-7 HCS<span>Retrieval-based Knowledge Base</span></div>
+  <nav class="tabs">
+    <button class="tab-btn active" id="btn-query" onclick="switchTab('query')">⚙ Query</button>
+    <button class="tab-btn" id="btn-eval"  onclick="switchTab('eval')">📊 Evaluation</button>
+  </nav>
+</header>
+
+<!-- ── Query panel ── -->
+<div class="panel active" id="panel-query">
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="search-input" type="text" autocomplete="off"
+           placeholder="Ask anything about the Aegis Series-7 HCS…"
+           onkeydown="if(event.key==='Enter') runSearch()"/>
+    <button id="search-btn" onclick="runSearch()">Search</button>
+  </div>
+
+  <div class="chips-label">23 evaluation questions — click to run live through the pipeline</div>
+  <div class="chips" id="chips"></div>
+
+  <div class="loading" id="loading"><span class="spinner"></span>Running retrieval pipeline…</div>
+  <div id="result"></div>
+</div>
+
+<!-- ── Eval panel ── -->
+<div class="panel" id="panel-eval">
+  <div class="eval-meta" id="eval-meta">Loading evaluation results…</div>
+  <div class="metrics-grid" id="metrics-grid"></div>
+  <div class="section">
+    <div class="section-head">Per-question results (scored against eval/gold_answers.json)</div>
+    <div class="section-body" style="padding:0; overflow-x:auto;">
+      <table class="eval-table" id="eval-table">
+        <thead><tr>
+          <th>Q</th><th>Question</th><th>Expected</th><th>Predicted</th>
+          <th>Overall</th><th>Fact score</th><th>Cit. prec.</th><th>Cit. recall</th><th>Abstain</th>
+        </tr></thead>
+        <tbody id="eval-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE = '';
+let QUESTIONS = [];
+
+// ── Tab switch ────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  ['query','eval'].forEach(t => {
+    document.getElementById(`panel-${t}`).classList.toggle('active', t === tab);
+    document.getElementById(`btn-${t}`).classList.toggle('active', t === tab);
+  });
+  if (tab === 'eval') loadEval();
+}
+
+// ── Load question chips (question text only — no Q-number prefix) ─────────────
+async function loadChips() {
+  QUESTIONS = await fetch(`${BASE}/api/questions`).then(r => r.json());
+  const el = document.getElementById('chips');
+  el.innerHTML = QUESTIONS.map((q, i) => {
+    const text = q.question;
+    const label = text.length > 55 ? text.substring(0, 55) + '\u2026' : text;
+    return `<span class="chip" data-qi="${i}" title="${escHtml(text)}">${escHtml(label)}</span>`;
+  }).join('');
+  // Chip click: fill the search bar only. User clicks Search to run.
+  el.querySelectorAll('.chip').forEach((chip, i) => {
+    chip.addEventListener('click', function() {
+      var q = QUESTIONS[i];
+      if (!q) return;
+      document.getElementById('search-input').value = q.question;
+      document.getElementById('search-input').focus();
+    });
+  });
+}
+
+// ── Run query ─────────────────────────────────────────────────────────────────
+function runSearch() {
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) return;
+  doSearch(q);
+}
+
+async function doSearch(query) {
+  // Always fill search box so user can see what's being searched
+  document.getElementById('search-input').value = query;
+  document.getElementById('search-input').focus();
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('result').innerHTML = '';
+  try {
+    const r = await fetch(`${BASE}/api/search?q=${encodeURIComponent(query)}`).then(x => x.json());
+    document.getElementById('result').innerHTML = renderResult(r, query);
+  } catch(e) {
+    document.getElementById('result').innerHTML = `<p style="color:var(--red)">Error: ${escHtml(String(e))}</p>`;
+  } finally {
+    document.getElementById('loading').classList.remove('show');
+  }
+}
+
+// ── Render result ─────────────────────────────────────────────────────────────
+function statusBadge(s) {
+  const map = {
+    'answered':          ['b-answered', '✓ Answered'],
+    'gap':               ['b-gap',      '⚠ Not fully in sources'],
+    'gap_false_premise': ['b-fp',       '✗ False premise'],
+    'conflict':          ['b-conflict', '⚡ Conflict'],
+    'partial':           ['b-partial',  '◑ Partial'],
+    'not_found':         ['b-notfound', '✗ Not found'],
+  };
+  const [cls, label] = map[s] || ['b-notfound', s];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+function confBadge(c) {
+  const map = {high:'b-high',medium:'b-medium',low:'b-low'};
+  return c ? `<span class="badge ${map[c]||'b-medium'}">${c.toUpperCase()} confidence</span>` : '';
+}
+function trustClass(t) { return `t${t}`; }
+
+function renderResult(r, query) {
+  const conf = r.confidence || {};
+
+  // ── Version history / conflicts ──────────────────────────────────────────
+  const vh = r.version_history || [];
+  const vhHTML = vh.length > 1 ? `
+    <div class="section">
+      <div class="section-head">⏱ Version history &amp; supersessions (${vh.length} records)</div>
+      <div class="section-body">
+        ${vh.map(h => {
+          const sClass = {active:'vh-active',version_scoped:'vh-active',superseded:'vh-superseded',
+                          conflict:'vh-conflict',observed:'vh-observed'}[h.status] || 'vh-legacy';
+          return `<div class="vh-row">
+            <div class="vh-scope">${escHtml(h.scope||'all versions')}</div>
+            <div class="vh-val">${escHtml(h.value)}</div>
+            <div><span class="vh-status ${sClass}">${h.status}</span></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  const conflicts = r.conflicts || [];
+  const confHTML = conflicts.length ? `
+    <div class="section">
+      <div class="section-head">⚡ Conflicts (${conflicts.length})</div>
+      <div class="section-body">
+        ${conflicts.map(c => `
+          <div style="background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:0.8rem">
+            <div style="font-family:var(--mono);font-size:0.7rem;color:var(--amber);margin-bottom:4px">${escHtml(c.conflict_id||'')}</div>
+            <div style="color:var(--text);margin-bottom:4px">${escHtml(c.description||'')}</div>
+            <div style="color:var(--text2);border-left:2px solid var(--amber);padding-left:8px">${escHtml(c.resolution||'')}</div>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  // ── Claims ───────────────────────────────────────────────────────────────
+  const claims = r.claims_used || [];
+  const claimsHTML = claims.length ? `
+    <div class="section">
+      <div class="section-head">📋 Claims used (${claims.length})</div>
+      <div class="section-body" style="padding:0">
+        <table class="claims-table">
+          <thead><tr><th>Claim</th><th>Value</th><th>Scope</th><th>Status</th><th>Trust</th><th>Conf</th></tr></thead>
+          <tbody>
+            ${claims.map(c => `<tr>
+              <td><span class="claim-id">${escHtml(c.claim_id)}</span></td>
+              <td style="max-width:280px">${escHtml(c.value)}</td>
+              <td>${c.scope && c.scope !== 'all revisions' ? `<span class="scope-tag">${escHtml(c.scope)}</span>` : '<span style="color:var(--muted);font-size:0.68rem">all</span>'}
+                  ${c.is_observed ? '<span class="obs-tag">observed</span>' : ''}</td>
+              <td><span style="font-size:0.68rem">${escHtml(c.status)}</span></td>
+              <td><span class="trust-tag ${trustClass(c.trust_tier)}">T${c.trust_tier}</span></td>
+              <td><span style="font-size:0.68rem;color:var(--text2)">${escHtml(c.confidence||'')}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>` : '';
+
+  // ── Evidence ─────────────────────────────────────────────────────────────
+  const evs = r.evidence || [];
+  const evHTML = evs.length ? `
+    <div class="section">
+      <div class="section-head">📄 Evidence (${evs.length} source${evs.length>1?'s':''})</div>
+      <div class="section-body">
+        ${evs.map(e => `
+          <div class="ev-card">
+            <div class="ev-file">${escHtml(e.source_file)}</div>
+            <div class="ev-loc">${e.section ? `§ ${escHtml(e.section)}` : ''}${e.page ? ` · p.${e.page}` : ''}</div>
+            ${e.snippet ? `<div class="ev-snippet">${escHtml(e.snippet)}</div>` : ''}
+            <div class="ev-meta">
+              <span class="ev-tag trust-tag ${trustClass(e.trust_tier)}">T${e.trust_tier}</span>
+              <span class="ev-tag">${escHtml(e.extraction_method||'')}</span>
+              ${e.extraction_confidence < 0.8 ? `<span class="ev-tag" style="color:var(--amber)">conf ${(e.extraction_confidence*100).toFixed(0)}%</span>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  // ── Could not determine ───────────────────────────────────────────────────
+  const gaps = r.could_not_determine || [];
+  const gapsHTML = gaps.length ? `
+    <div class="section">
+      <div class="section-head">🔍 Could not determine (${gaps.length})</div>
+      <div class="section-body">
+        ${gaps.map(g => `
+          <div class="gap-block">
+            <div class="gap-searched">Searched: ${escHtml(g.what_was_searched||'')}</div>
+            <div class="gap-missing">${escHtml(g.what_is_missing||'')}</div>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  // ── Confidence breakdown ──────────────────────────────────────────────────
+  const confBreakHTML = conf.overall ? `
+    <div class="section">
+      <div class="section-head">🎯 Confidence breakdown</div>
+      <div class="section-body">
+        <div class="conf-block">
+          <div class="conf-row"><div class="conf-key">Overall</div><div class="conf-val">${escHtml(conf.overall||'')}</div></div>
+          <div class="conf-row"><div class="conf-key">Source trust</div><div class="conf-val">${escHtml(conf.source_trust||'')}</div></div>
+          <div class="conf-row"><div class="conf-key">Extraction method</div><div class="conf-val">${escHtml(conf.extraction_method||'')}</div></div>
+          <div class="conf-row"><div class="conf-key">Corroboration</div><div class="conf-val">${escHtml(conf.corroboration||'')}</div></div>
+        </div>
+        ${conf.conflict_present ? '<div style="margin-top:10px;padding:8px 12px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:7px;font-size:0.78rem;color:var(--amber)">⚡ Conflict present — see Conflicts &amp; version history section</div>' : ''}
+        ${conf.notes ? `<div style="margin-top:8px;font-size:0.78rem;color:var(--text2)">${escHtml(conf.notes)}</div>` : ''}
+      </div>
+    </div>` : '';
+
+  return `
+    <div class="result-header">
+      <div class="result-q">${escHtml(query)}</div>
+      <div class="badge-row">
+        ${statusBadge(r.status)}
+        ${confBadge(conf.overall)}
+        ${(r.recognized_entities||[]).map(e => `<code style="font-size:0.65rem;padding:2px 6px;background:rgba(59,130,246,0.1);color:#60a5fa;border-radius:4px">${escHtml(e)}</code>`).join('')}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">Answer</div>
+      <div class="section-body"><div class="answer-text">${escHtml(r.answer||'')}</div></div>
+    </div>
+
+    ${claimsHTML}
+    ${evHTML}
+    ${vhHTML}
+    ${confHTML}
+    ${gapsHTML}
+    ${confBreakHTML}
+  `;
+}
+
+// ── Evaluation tab ────────────────────────────────────────────────────────────
+async function loadEval() {
+  try {
+    const data = await fetch(`${BASE}/api/eval/results`).then(r => r.json());
+    const m = data.metrics || data;
+    document.getElementById('eval-meta').textContent =
+      `Scored against eval/gold_answers.json · ${m.total} questions · All results from live retrieval pipeline`;
+
+    const ab = m.abstention_overall || {};
+    const abt = m.abstention_by_type || {};
+    document.getElementById('metrics-grid').innerHTML = [
+      ['Overall correct',       `${m.overall_correct}/${m.total}`,    `${m.overall_accuracy_pct?.toFixed(1)}%`,  'mn-green'],
+      ['Status accuracy',       `${m.status_correct}/${m.total}`,     `${m.status_accuracy_pct?.toFixed(1)}%`,   'mn-green'],
+      ['Avg key-fact score',    m.avg_key_fact_score,                  '',                                        'mn-blue'],
+      ['Citation precision',    m.avg_citation_precision,              '',                                        'mn-blue'],
+      ['Citation recall',       m.avg_citation_recall,                 '',                                        'mn-blue'],
+      ['Abstention (all)',      `${ab.correct}/${ab.total}`,           `${ab.pct?.toFixed(1)}%`,                  'mn-amber'],
+      ['  not_found',           `${abt.not_found?.correct||0}/${abt.not_found?.total||0}`, `${(abt.not_found?.pct||0).toFixed(1)}%`, 'mn-amber'],
+      ['  false_premise',       `${abt.false_premise?.correct||0}/${abt.false_premise?.total||0}`, `${(abt.false_premise?.pct||0).toFixed(1)}%`, 'mn-amber'],
+      ['  gap_missing_doc',     `${abt.gap_missing_document?.correct||0}/${abt.gap_missing_document?.total||0}`, `${(abt.gap_missing_document?.pct||0).toFixed(1)}%`, 'mn-amber'],
+    ].map(([lbl, num, pct, cls]) => `
+      <div class="metric-card">
+        <div class="metric-num ${cls}">${num}</div>
+        ${pct ? `<div style="font-size:0.85rem;color:var(--text2)">${pct}</div>` : ''}
+        <div class="metric-lbl">${lbl}</div>
+      </div>`).join('');
+
+    const per = m.per_question || [];
+    document.getElementById('eval-tbody').innerHTML = per.map(s => `
+      <tr>
+        <td><span class="claim-id">Q${s.q}</span></td>
+        <td class="q-text-cell">${escHtml(s.question)}</td>
+        <td style="font-size:0.7rem">${escHtml(s.expected_status)}</td>
+        <td style="font-size:0.7rem">${escHtml(s.predicted_status)}</td>
+        <td class="${s.overall_correct ? 'ok-yes':'ok-no'}">${s.overall_correct ? 'YES':'NO'}</td>
+        <td>${s.fact_score.toFixed(2)}</td>
+        <td>${s.citation_precision.toFixed(2)}</td>
+        <td>${s.citation_recall.toFixed(2)}</td>
+        <td class="${s.abstention_correct ? 'ok-yes':'ok-no'}">${s.abstention_correct ? 'YES':'NO'}</td>
+      </tr>`).join('');
+  } catch(e) {
+    document.getElementById('eval-meta').innerHTML =
+      `<span style="color:var(--red)">Run <code>python eval/evaluator.py</code> first to generate results.</span>`;
+  }
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                  .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// Init
+loadChips();
+</script>
+</body>
+</html>

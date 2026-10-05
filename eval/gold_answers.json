@@ -1,0 +1,209 @@
+[
+  {
+    "question_id": 1,
+    "question": "What must be true before starting the Hydraulic Power Unit?",
+    "expected_status": "answered",
+    "key_facts": ["IV-21", "OPEN", "emergency stop", "RESET", "access panel", "CLOSED", "fluid level", "normal band"],
+    "expected_sources": ["manuals/operator_manual.pdf", "configuration/configuration_export.json"],
+    "expected_entities": ["HPU", "IV-21"],
+    "notes": "4 interlocks. Section 8 bleed procedure is a gap but does not affect Q1."
+  },
+  {
+    "question_id": 2,
+    "question": "What is the current normal operating pressure for the HPU, and under what conditions does that apply?",
+    "expected_status": "answered",
+    "key_facts": ["200 bar", "3.2", "software revision", "180 bar", "175 bar", "conflict"],
+    "expected_sources": ["manuals/operator_manual.pdf", "engineering_bulletins/ECN-1042.pdf", "configuration/configuration_export.json"],
+    "expected_entities": ["HPU", "PS-04A"],
+    "notes": "Must mention version scope. 175 bar site note is a conflict not a spec. 180->200 is version-scoped supersession, NOT a conflict."
+  },
+  {
+    "question_id": 3,
+    "question": "What does alarm A17 indicate, and what are its possible causes?",
+    "expected_status": "answered",
+    "key_facts": ["150 bar", "IV-21", "fluid level", "sensor signal invalid"],
+    "expected_sources": ["reference/alarm_reference.pdf", "manuals/maintenance_manual.pdf"],
+    "expected_entities": ["A17"],
+    "notes": "3 causes. ECN-1058 correction noted."
+  },
+  {
+    "question_id": 4,
+    "question": "Is PS-04 the same component as PS-04A?",
+    "expected_status": "answered",
+    "key_facts": ["No", "distinct", "different", "signal conditioning", "3.2"],
+    "expected_sources": ["engineering_bulletins/ECN-1042.pdf", "reference/component_register.xlsx"],
+    "expected_entities": ["PS-04", "PS-04A"],
+    "notes": "Must say No/distinct. Not interchangeable."
+  },
+  {
+    "question_id": 5,
+    "question": "Which document introduced the change from PS-04 to PS-04A?",
+    "expected_status": "answered",
+    "key_facts": ["ECN-1042"],
+    "expected_sources": ["engineering_bulletins/ECN-1042.pdf"],
+    "expected_entities": ["ECN-1042", "PS-04", "PS-04A"],
+    "notes": ""
+  },
+  {
+    "question_id": 6,
+    "question": "Which components connect directly to the HCS controller, according to the hydraulic schematic?",
+    "expected_status": "answered",
+    "key_facts": ["HPU", "PS-04A", "IV-21"],
+    "expected_sources": ["diagrams/system_diagram_hydraulic.pdf", "diagrams/wiring_diagram.pdf"],
+    "expected_entities": ["PLC-03", "HPU", "PS-04A", "IV-21"],
+    "notes": "LOW confidence from vector shape extraction. Must NOT claim HIGH confidence. Electrical diagram items are corroboration, not primary."
+  },
+  {
+    "question_id": 7,
+    "question": "What action is required if alarm A17 persists for more than 10 seconds?",
+    "expected_status": "answered",
+    "key_facts": ["10 seconds", "Shutdown Procedure 4.7", "IV-21", "pressure decay", "isolation"],
+    "expected_sources": ["manuals/maintenance_manual.pdf", "reference/alarm_reference.pdf"],
+    "expected_entities": ["A17"],
+    "notes": ""
+  },
+  {
+    "question_id": 8,
+    "question": "Under what circumstances must the controller not be reset?",
+    "expected_status": "answered",
+    "key_facts": ["50 bar", "above 50 bar", "must not be reset"],
+    "expected_sources": ["manuals/operator_manual.pdf", "manuals/maintenance_manual.pdf"],
+    "expected_entities": ["PLC-03"],
+    "notes": "Section 8 bleed procedure is missing from package. Must be noted as gap."
+  },
+  {
+    "question_id": 9,
+    "question": "What was the operating pressure threshold before software revision 3.2, and what changed it?",
+    "expected_status": "answered",
+    "key_facts": ["180 bar", "ECN-1042", "3.2", "PS-04"],
+    "expected_sources": ["engineering_bulletins/ECN-1042.pdf", "manuals/legacy_manual_v1.html", "reference/revision_history.xlsx"],
+    "expected_entities": ["HPU", "ECN-1042"],
+    "notes": "180->200 is version-scoped supersession (ECN-1042), NOT a conflict."
+  },
+  {
+    "question_id": 10,
+    "question": "Which alarm is associated with a pressure sensor reading below 150 bar?",
+    "expected_status": "answered",
+    "key_facts": ["A17", "150 bar"],
+    "expected_sources": ["reference/alarm_reference.pdf"],
+    "expected_entities": ["A17"],
+    "notes": "Threshold unchanged by ECN-1042 and ECN-1058."
+  },
+  {
+    "question_id": 11,
+    "question": "According to the component register, what is the location of the isolation valve IV-21?",
+    "expected_status": "answered",
+    "key_facts": ["Hydraulic Module"],
+    "expected_sources": ["reference/component_register.xlsx"],
+    "expected_entities": ["IV-21"],
+    "notes": ""
+  },
+  {
+    "question_id": 12,
+    "question": "Does the training slide deck introduce any component or alarm not found in the manuals?",
+    "expected_status": "answered",
+    "key_facts": ["Auxiliary Reservoir", "also appears", "no new"],
+    "expected_sources": ["extra/training_slide_excerpt.pptx"],
+    "expected_entities": [],
+    "notes": "Auxiliary Reservoir also in hydraulic diagram. Slides restate manual content. No new alarms."
+  },
+  {
+    "question_id": 13,
+    "question": "What sensor ID appears on the diagnostics screenshot, and does it match a known component?",
+    "expected_status": "answered",
+    "key_facts": ["P.S.04-A", "PS-04A", "matches"],
+    "expected_sources": ["screenshots/screen_03_diagnostics.png", "reference/component_register.xlsx"],
+    "expected_entities": ["PS-04A"],
+    "notes": "P.S.04-A is a display variant of PS-04A (physical label format)."
+  },
+  {
+    "question_id": 14,
+    "question": "Per the revision history, when did software revision 3.2 take effect, and what changed alongside it?",
+    "expected_status": "answered",
+    "key_facts": ["2025-09-30", "PS-04", "PS-04A", "180 bar", "200 bar", "ECN-1042"],
+    "expected_sources": ["reference/revision_history.xlsx"],
+    "expected_entities": ["ECN-1042"],
+    "notes": ""
+  },
+  {
+    "question_id": 15,
+    "question": "What does sensor_ps04a_threshold_bar in the configuration export correspond to in the operator manual's terminology?",
+    "expected_status": "answered",
+    "key_facts": ["normal operating pressure", "200 bar", "revision 3.2"],
+    "expected_sources": ["configuration/configuration_export.json", "manuals/operator_manual.pdf"],
+    "expected_entities": ["PS-04A"],
+    "notes": "sensor_ps04a_threshold_bar = normal operating pressure setpoint (not an alarm threshold)."
+  },
+  {
+    "question_id": 16,
+    "question": "Does the 200 bar threshold apply to all Aegis HCS units, or only some?",
+    "expected_status": "answered",
+    "key_facts": ["only", "3.2", "180 bar"],
+    "expected_sources": ["manuals/operator_manual.pdf", "engineering_bulletins/ECN-1042.pdf"],
+    "expected_entities": ["HPU"],
+    "notes": "200 bar ONLY for sw_rev >= 3.2."
+  },
+  {
+    "question_id": 17,
+    "question": "Is PS-04 the same as PS-40?",
+    "expected_status": "answered",
+    "key_facts": ["No", "different", "coolant loop", "Skid B", "HPU discharge"],
+    "expected_sources": ["reference/component_register.xlsx", "configuration/configuration_export.json"],
+    "expected_entities": ["PS-04", "PS-40"],
+    "notes": "PS-40 is on coolant loop Skid B. Completely different circuit."
+  },
+  {
+    "question_id": 18,
+    "question": "What was the pressure limit before revision 3.2?",
+    "expected_status": "answered",
+    "key_facts": ["180 bar", "prior to 3.2", "ECN-1042"],
+    "expected_sources": ["manuals/legacy_manual_v1.html", "engineering_bulletins/ECN-1042.pdf"],
+    "expected_entities": ["HPU"],
+    "notes": "Same answer as Q9 pressure part."
+  },
+  {
+    "question_id": 19,
+    "question": "What is the maximum continuous operating temperature of PS-04A?",
+    "expected_status": "not_found",
+    "key_facts": ["not found", "not documented", "not in any source"],
+    "expected_sources": [],
+    "expected_entities": ["PS-04A"],
+    "notes": "No datasheet or spec sheet for PS-04A in package."
+  },
+  {
+    "question_id": 20,
+    "question": "What is the calibration interval for the electrical system diagram's voltage sensor?",
+    "expected_status": "gap_false_premise",
+    "key_facts": ["no voltage sensor", "not identified", "false premise", "480V", "power distribution"],
+    "expected_sources": ["diagrams/system_diagram_electrical.png"],
+    "expected_entities": [],
+    "notes": "No voltage measurement sensor exists in the package. Q has a false premise."
+  },
+  {
+    "question_id": 21,
+    "question": "Who approved engineering bulletin ECN-1058?",
+    "expected_status": "not_found",
+    "key_facts": ["not found", "not named", "no approver"],
+    "expected_sources": ["engineering_bulletins/ECN-1058.pdf"],
+    "expected_entities": ["ECN-1058"],
+    "notes": "Approver field absent in extracted content."
+  },
+  {
+    "question_id": 22,
+    "question": "What is the mean time between failures for the isolation valve IV-21?",
+    "expected_status": "not_found",
+    "key_facts": ["not found", "MTBF", "not documented"],
+    "expected_sources": [],
+    "expected_entities": ["IV-21"],
+    "notes": "No reliability data in package."
+  },
+  {
+    "question_id": 23,
+    "question": "Is the Aegis Series-7 HCS compatible with a 3-phase 400V supply?",
+    "expected_status": "not_found",
+    "key_facts": ["not found", "not documented", "480V"],
+    "expected_sources": ["diagrams/system_diagram_electrical.png"],
+    "expected_entities": [],
+    "notes": "Only 480V mentioned. No 400V information in any source."
+  }
+]

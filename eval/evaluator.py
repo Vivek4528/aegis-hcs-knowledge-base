@@ -47,20 +47,35 @@ def score_one(result: dict, gold: dict) -> dict:
 
     # ── Status match ──────────────────────────────────────────────────────────
     if expected_status in gap_types:
-        # Any gap-type status is a correct abstention
         status_correct     = predicted_status in gap_types
         abstention_correct = status_correct
     else:
         status_correct     = (predicted_status == expected_status)
         abstention_correct = True   # n/a for answerable questions
 
-    # ── Key fact match (only for answerable questions) ────────────────────────
-    key_facts  = gold.get("key_facts", [])
-    facts_hit  = sum(1 for kf in key_facts if kf.lower() in answer_text)
-    fact_score = facts_hit / len(key_facts) if key_facts else 1.0
+    # ── Structured abstention comparison (Item 4) ─────────────────────────────
+    # Compare structured fields (status, entity, missing predicate/unknown_id)
+    if expected_status in gap_types:
+        ent_match = True
+        if gold.get("expected_entities"):
+            rec_ents = result.get("recognized_entities", [])
+            uid = result.get("unknown_id", "")
+            res_ent = result.get("entity", "")
+            ent_match = any(e in rec_ents or e == uid or e == res_ent for e in gold["expected_entities"])
+        abstention_correct = status_correct and ent_match
 
-    # ── Missing facts (for investigation) ─────────────────────────────────────
-    missing_facts = [kf for kf in key_facts if kf.lower() not in answer_text]
+    # ── Key fact match ────────────────────────────────────────────────────────
+    if expected_status not in gap_types:
+        key_facts  = gold.get("key_facts", [])
+        facts_hit  = sum(1 for kf in key_facts if kf.lower() in answer_text)
+        fact_score = facts_hit / len(key_facts) if key_facts else 1.0
+        missing_facts = [kf for kf in key_facts if kf.lower() not in answer_text]
+    else:
+        # Abstentions: fact score is 1.0 if abstention was correctly structured
+        key_facts = []
+        facts_hit = 1 if abstention_correct else 0
+        fact_score = 1.0 if abstention_correct else 0.0
+        missing_facts = []
 
     # ── Citation precision / recall ───────────────────────────────────────────
     exp_sources = set(gold.get("expected_sources", []))
@@ -73,22 +88,19 @@ def score_one(result: dict, gold: dict) -> dict:
         precision = recall = 0.0
 
     # ── Overall correct ───────────────────────────────────────────────────────
-    # Gap questions: correct iff abstention type is correct AND no invented fact
+    # Gap questions: correct iff structured abstention is correct
     # Answered questions: correct iff status correct AND fact_score >= 0.8 AND citation_recall > 0
     if expected_status in gap_types:
         overall_correct = abstention_correct
     else:
-        has_source = (recall > 0) or (not exp_sources)  # no penalty if no gold sources defined
+        has_source = (recall > 0) or (not exp_sources)
         overall_correct = status_correct and (fact_score >= FACT_THRESHOLD) and has_source
 
     # ── Abstention sub-type (3-way split) ────────────────────────────────────
-    # gap_missing_document: entity known but specific fact absent from package
-    # not_found: entity not in any file
-    # false_premise: question contains false assumption
     abstention_subtype = GAP_SUBTYPES.get(expected_status, "n/a")
 
     return {
-        "q":                  gold["question_id"],
+        "q":                  gold.get("question_id", gold.get("id", 0)),
         "question":           gold["question"][:60] + "…",
         "expected_status":    expected_status,
         "predicted_status":   predicted_status,
@@ -108,7 +120,6 @@ def score_one(result: dict, gold: dict) -> dict:
     }
 
 
-
 def run_evaluation():
     kb = KnowledgeBase()
     kb.load()
@@ -126,13 +137,19 @@ def run_evaluation():
     n = len(results)
     correct   = sum(1 for s in results if s["overall_correct"])
     status_ok = sum(1 for s in results if s["status_correct"])
+
+    # ── Answerable metrics (n=18) ─────────────────────────────────────────────
+    answ_qs = [s for s in results if s["expected_status"] == "answered"]
+    n_answ  = len(answ_qs)
+    answ_ok = sum(1 for s in answ_qs if s["overall_correct"])
+    answ_fact = sum(s["fact_score"] for s in answ_qs) / n_answ if n_answ else 0.0
+    answ_prec = sum(s["citation_precision"] for s in answ_qs) / n_answ if n_answ else 0.0
+    answ_rec  = sum(s["citation_recall"] for s in answ_qs) / n_answ if n_answ else 0.0
+
+    # ── All questions metrics (n=23) ──────────────────────────────────────────
     avg_facts = sum(s["fact_score"] for s in results) / n
     avg_prec  = sum(s["citation_precision"] for s in results) / n
     avg_rec   = sum(s["citation_recall"]    for s in results) / n
-
-    # ── Answerable ────────────────────────────────────────────────────────────
-    answ_qs = [s for s in results if s["expected_status"] == "answered"]
-    answ_ok = sum(1 for s in answ_qs if s["overall_correct"])
 
     # ── Abstention split by type ───────────────────────────────────────────────
     gap_types_all = {"gap", "gap_false_premise", "not_found"}
@@ -158,14 +175,28 @@ def run_evaluation():
         "total":                  n,
         "overall_correct":        correct,
         "overall_accuracy_pct":   round(correct / n * 100, 1),
-        "fact_threshold":         FACT_THRESHOLD,
         "status_correct":         status_ok,
         "status_accuracy_pct":    round(status_ok / n * 100, 1),
+        "avg_fact_score":         round(avg_facts, 2),
         "avg_key_fact_score":     round(avg_facts, 2),
         "avg_citation_precision": round(avg_prec, 2),
         "avg_citation_recall":    round(avg_rec, 2),
-        "abstention_overall":     {"correct": gap_ok, "total": len(gap_qs),
-                                   "pct": round(gap_ok / len(gap_qs) * 100, 1) if gap_qs else 0},
+        "fact_threshold":         FACT_THRESHOLD,
+        "answerable_count":       n_answ,
+        "answerable_correct":     answ_ok,
+        "answerable_fact_score":  round(answ_fact, 3),
+        "answerable_citation_prec": round(answ_prec, 3),
+        "answerable_citation_rec":  round(answ_rec, 3),
+        "abstention_all": {
+            "correct": gap_ok,
+            "total":   len(gap_qs),
+            "pct":     round(gap_ok / len(gap_qs) * 100, 1) if gap_qs else 0,
+        },
+        "abstention_overall": {
+            "correct": gap_ok,
+            "total":   len(gap_qs),
+            "pct":     round(gap_ok / len(gap_qs) * 100, 1) if gap_qs else 0,
+        },
         "abstention_by_type":     abs_by_type_final,
         "answered_correct":       answ_ok,
         "answered_accuracy_pct":  round(answ_ok / len(answ_qs) * 100, 1) if answ_qs else 0,

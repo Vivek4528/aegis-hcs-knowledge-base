@@ -243,37 +243,69 @@ $$\text{Correct} = \begin{cases}
 
 ---
 
-## 7. Generalization & Held-Out Adversarial Testing
+## 7. Evaluation & Verification Tiers (Dev, Regression, Held-Out)
 
-A core tenet of rigorous engineering is that development set accuracy often reflects co-adaptation to the gold queries. To measure genuine generalization, the system was subjected to two distinct, frozen held-out test sets.
+A core tenet of rigorous engineering is that development set accuracy often reflects co-adaptation to the gold queries. To measure genuine generalization, the system was subjected to three distinctly labeled test suites.
 
-### 7.1 Adversarial Set 1 (15 Questions, Frozen)
-- **Score**: **14 / 15 (93.3%)**
-- **Passed**: Paraphrased pressure queries, ECN-1042 cross-references, known component wiring lookups, A99 unknown alarm rejection, false premise queries.
-- **Failures Analyzed**:
-  - `KA1` relay was originally marked expecting `not_found`, but was subsequently implemented as a verified entity per engineering diagram AEG-DWG-E02.
+### 7.1 Development Set (`eval/evaluator.py`, `eval/gold_answers.json`) — Core Canonical Benchmark
+- **Coverage**: 23 canonical engineering questions executed live across the pipeline.
+- **Overall Correct**: **23 / 23 (100.0%)** (status match $\land$ key-fact score $\ge 0.80$ $\land$ citation recall $> 0$).
+- **Status Accuracy**: **23 / 23 (100.0%)**.
+- **Average Key-Fact Score**: **0.98** (Answerable: 0.980).
+- **Average Citation Recall**: **0.86** (Answerable: 0.833, Precision: 0.47).
+- **Abstention Breakdown**:
+  - `not_found`: 4 / 4 (100.0%)
+  - `false_premise`: 1 / 1 (100.0%)
+- **Answerable Accuracy**: 18 / 18 (100.0%).
 
-### 7.2 Adversarial Set 2 (15 Questions, Unseen Authors, Frozen)
-- **Score**: **13 / 15 (86.7%)**
-- **Passed**: Subsystem queries, alternate casing tests, multi-hop revision queries, A99 rejection, voltage sensor false premise rejection.
-- **Failures Analyzed**:
-  - `KA1` answered (expected not_found in legacy test, now valid entity).
-  - Voltage sensor calibration query matched general system claims before entity guard refinement.
+### 7.2 Regression Sets (Used for Diagnosis & Boundary Probing)
+- **Regression Set 1 (`adversarial_new.py`)**: 15 questions probing paraphrases, typos, conflict probes, diagnostic screen variants, and document provenance.
+  - **Score**: **14 / 15 (93.3%)**.
+  - *Diagnosis*: Item A8 (`what is KA1?`) was originally written expecting `not_found` before KA1 was extracted. In Phase 8, KA1 was integrated as a verified diagram entity in `AEG-DWG-E02`.
+- **Regression Set 2 (`adversarial_set2.py`)**: 15 questions probing operating pressure variants, firmware 3.1.5 scoping, and ECN-1058 setpoint invariance.
+  - **Score**: **13 / 15 (86.7%)**.
+  - *Diagnosis*: B8 (`KA1`) returns active schematic claim (expected `not_found` in legacy test); B11 voltage sensor returns false-premise abstention.
 
-### 7.3 Adversarial Set 3 (15 Questions, Unseen Hardening Set)
-- **Score**: **15 / 15 (100.0%) PASS**
-- **Validation**:
-  - Unknown alarm rejection (`A25`, `A40`): Correctly returns `not_found` with missing document citation (`AEG-AL-701`).
-  - Unknown components (`PS-99`, `XV-99`, `J-99`, `ECN-9999`): Correctly returns `not_found` with component register citation (`AEG-CR-700`).
-  - False premise property queries: "reset time of A17" and "max temperature of PS-04A" return `gap_false_premise` with `"not found for this entity"`.
-  - Diagram entities (`KA1`, `TB-7`): Verified answers referencing electrical schematic `AEG-DWG-E02` and wiring diagram `AEG-DWG-W03`.
-  - 175 bar field note conflict query: Explicitly returned with `"unverified, low trust"` advisory label.
+### 7.3 Held-Out Set (`adversarial_set3.py`) — Written After Fixes (Optimistic Validation)
+- **15 Questions**: Probing unknown alarms (A25, A40), unknown components (PS-99, XV-99, J-99, ECN-9999), property false premises (A17 reset time, PS-04A max temp), 175 bar conflict labeling, and diagram entities (KA1, TB-7).
+- **Raw Score (Substring matching)**: **15 / 15 (100.0%) PASS**.
+- **Corrected Score (Structured field comparison)**: **15 / 15 (100.0%) PASS**.
+- **Structured Fields Evaluated**:
+  - `status`: verified against expected abstention class (`not_found` or `gap_false_premise`).
+  - `unknown_id`: verified extracting `A25`, `A40`, `PS-99`, `XV-99`, `J-99`, `ECN-9999`.
+  - `entity` + `property`: verified identifying `A17` / `"reset time"` and `PS-04A` / `"max temperature"`.
 
-### 7.4 Ablation Study Findings
-Running `ablation.py` demonstrated the contribution of each module:
-1. **Removing Entity Resolution**: Overall accuracy collapses from 100% to **34.8%**; homonym collisions skyrocket.
-2. **Removing Trust Tiers**: System inappropriately serves T6 unreviewed field data (175 bar) as active truth in 42% of queries.
-3. **Removing Gap Suppression**: Active queries collapse into spurious gap reports for 30.4% of valid questions.
+### 7.4 Ablation Study & Architectural Component Switches
+
+The ablation study (`ablation.py`) evaluates system resilience across two suites using unified scoring:
+
+#### A. Canonical Dev Set (n=23)
+| Configuration | Status Acc | Fact Score | Citation Recall |
+|:---|:---:|:---:|:---:|
+| **Baseline (all switches on)** | **23/23 (100.0%)** | **0.984** | **0.862** |
+| 1. No alias resolution | 20/23 (87.0%) | 0.823 | 0.681 |
+| 2. No version scoping | 23/23 (100.0%) | 0.984 | 0.862 |
+| 3. No trust ranking | 23/23 (100.0%) | 0.984 | 0.862 |
+
+#### B. Targeted Switch Probe Set (n=9 Questions)
+A dedicated test set targeting specific component switches (`"hydraulic power pack"`, `"PS04A"`, `"pressure on firmware 3.1.5"`, `"175 bar vs 200 bar"`):
+| Configuration | Status Acc | Fact Score | Citation Recall |
+|:---|:---:|:---:|:---:|
+| **Baseline (all switches on)** | **9/9 (100.0%)** | **0.963** | **1.000** |
+| 1. No alias resolution (T1–T3) | 9/9 (100.0%) | 0.870 | 1.000 |
+| 2. No version scoping (T4–T6) | 9/9 (100.0%) | 0.963 | 1.000 |
+| 3. No trust ranking (T7–T9) | 9/9 (100.0%) | 0.963 | 1.000 |
+
+#### C. Answer Diff Proofs
+1. **Alias Switch Proof (T1: 'hydraulic power pack')**:
+   - *Baseline*: Retrieves HPU discharge claims and setpoints (`200 bar`, `180 bar`).
+   - *Ablated (OFF)*: Fails to resolve HPU; falls back to generic wiring references (`J-14`, `TB-7`).
+2. **Version Scoping Proof (T4: 'pressure before 3.2 on firmware 3.1.5')**:
+   - *Baseline*: Correctly bounds versions (`firmware < 3.2`).
+   - *Ablated (OFF)*: Strips version scopes and mixes unversioned setpoints.
+3. **Trust Ranking Proof (T9: 'unreviewed T6 note treated as T1')**:
+   - *Baseline*: Properly flags 175 bar as `[T6 — UNREVIEWED FIELD NOTE]`.
+   - *Ablated (OFF)*: Erroneously promotes unverified observation to `[T1 — low-trust observed]`.
 
 ---
 

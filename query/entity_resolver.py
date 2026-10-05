@@ -93,6 +93,26 @@ _RAW_ALIASES = [
     ("training deck",                   "training_slides", "extra/training_slide_excerpt.pptx"),
     ("slide deck",                      "training_slides", "extra/training_slide_excerpt.pptx"),
     ("training_slide_excerpt.pptx",     "training_slides", "extra/training_slide_excerpt.pptx"),
+
+    # Revision history
+    ("software revision 3.2",           "sw_revision_3.2", "reference/revision_history.xlsx"),
+    ("sw revision 3.2",                 "sw_revision_3.2", "reference/revision_history.xlsx"),
+    ("revision 3.2",                    "sw_revision_3.2", "reference/revision_history.xlsx"),
+    ("revision history",                "sw_revision_3.2", "reference/revision_history.xlsx"),
+    ("revision_history.xlsx",           "sw_revision_3.2", "reference/revision_history.xlsx"),
+
+    # Config keys
+    ("sensor_ps04a_threshold_bar",       "PS-04A", "configuration/configuration_export.json"),
+
+    # Documents
+    ("aeg-om-700",                       "AEG-OM-700", "manuals/operator_manual.pdf"),
+    ("aeg-mm-700",                       "AEG-MM-700", "manuals/maintenance_manual.pdf"),
+    ("aeg-al-700",                       "AEG-AL-700", "reference/alarm_reference.pdf"),
+    ("aeg-cr-700",                       "AEG-CR-700", "reference/component_register.xlsx"),
+    ("aeg-gl-700",                       "AEG-GL-700", "reference/terminology_glossary.docx"),
+    ("aeg-dwg-h01",                      "AEG-DWG-H01", "diagrams/system_diagram_hydraulic.pdf"),
+    ("aeg-dwg-e02",                      "AEG-DWG-E02", "diagrams/system_diagram_electrical.png"),
+    ("aeg-dwg-w03",                      "AEG-DWG-W03", "diagrams/wiring_diagram.pdf"),
 ]
 
 # Build sorted lookup (longest phrase first to prevent substring match errors)
@@ -243,54 +263,85 @@ def get_alias_source(alias: str) -> str:
     return "unknown"
 
 
-def check_unknown_ids(norm_query: str, known_entities: set) -> dict:
-    """
-    Rule on entity existence:
-    Examines candidate IDs (alarm, component, terminal, document) in query.
-    If a candidate ID has NO entity in the knowledge base, returns a not_found response
-    with 'cannot confirm', listing checked files and missing documents.
-    """
-    # 1. Alarm IDs: e.g. A25, A99, A40, alarm 25, alarm a99
-    alarm_matches = re.findall(r'\b(?:alarm\s+)?a-?(\d{1,3})\b', norm_query)
-    for num in alarm_matches:
-        canon_id = f"A{int(num)}"
-        if canon_id not in known_entities:
-            return {
-                "status": "not_found",
-                "unknown_id": canon_id,
-                "id_type": "alarm",
-                "answer": (
-                    f"cannot confirm alarm {canon_id}: AEG-AL-700 covers A17, A18, A19. "
-                    "AEG-AL-701 covers A01-A16 and A20-A34, which is not in the documentation package."
-                ),
-            }
+KNOWN_DOCUMENTS = {
+    "AEG-OM-700", "AEG-MM-700", "AEG-AL-700", "AEG-CR-700",
+    "AEG-GL-700", "AEG-DWG-H01", "AEG-DWG-E02", "AEG-DWG-W03",
+    "ECN-1042", "ECN-1058", "AEG-AL-701"
+}
 
-    # 2. Sensor / Component IDs: e.g. PS-99, IV-99, PLC-99, KA-99, TB-99, XV-99
-    comp_matches = re.findall(r'\b(ps|iv|plc|ka|tb|xv|hv|fv|v|cv|pump)-?(\d{1,3}[a-z]?)\b', norm_query)
-    for prefix, num in comp_matches:
-        prefix_upper = prefix.upper()
-        cand = f"{prefix_upper}-{num.upper()}"
-        cand_alt = f"{prefix_upper}{num.upper()}"
-        matched = False
-        for alias, ent, _ in ALIAS_TABLE:
-            if cand.lower() == alias or cand_alt.lower() == alias:
-                matched = True
-                break
-        if not matched and cand not in known_entities and cand_alt not in known_entities:
+IGNORE_PATTERNS = [
+    r'^(?:rev|v|version|ver)-?\d+(?:\.\d+)*$',
+    r'^(?:sec|section|step|page|screen|slide|table|fig|figure|line)-?\d+$',
+    r'^(?:bar|hcs|sw|hw|psi)$',
+]
+
+
+def check_unknown_ids(norm_query: str, known_entities: set, kb=None) -> dict:
+    """
+    Generic ID existence rule:
+    Any ID-shaped token ([A-Za-z]{1,5}-?\d{1,4}[A-Za-z]?, plus ECN-/AEG- doc IDs)
+    that does not resolve to an entity returns not_found even if other words match other claims.
+    Builds the 'what was checked' text from the claim store (which documents and entities actually exist).
+    """
+    # Dynamic component register extraction from kb
+    if kb and hasattr(kb, "claims"):
+        reg_entities = sorted({
+            c["subject"] for c in kb.claims.values()
+            if any("component_register" in ev.get("source_file", "") for ev in c.get("evidence", []))
+        })
+    else:
+        reg_entities = ["HPU", "IV-21", "PLC-03", "PS-04", "PS-04A", "PS-40"]
+    reg_str = ", ".join(reg_entities)
+
+    # 1. Document IDs: ECN-XXXX or AEG-XXX-XXX
+    doc_pat = r'\b(ecn-\d{1,4}|aeg-[a-z]{2,4}-\d{1,4})\b'
+    doc_matches = re.findall(doc_pat, norm_query, re.I)
+    for doc_cand in doc_matches:
+        cand = doc_cand.upper()
+        if cand not in KNOWN_DOCUMENTS and cand not in known_entities:
             return {
                 "status": "not_found",
                 "unknown_id": cand,
-                "id_type": "component",
+                "id_type": "document",
                 "answer": (
-                    f"cannot confirm component {cand}: not found in documentation package. "
-                    "Component register (AEG-CR-700) covers "
-                    "HPU, PS-04, PS-04A, PS-40, IV-21, PLC-03, KA1, TB-7. "
-                    f"{cand} does not appear in any documentation in this package."
+                    f"cannot confirm document {cand}: File manifest covers ECN-1042 and ECN-1058. "
+                    f"{cand} was not found in the package."
                 ),
             }
 
-    # 3. Terminal IDs: e.g. J-99
-    term_matches = re.findall(r'\bj-?(\d{1,3})\b', norm_query)
+    # Remove matched document strings so their parts (e.g. om-700) aren't re-matched as components
+    rem_query = re.sub(doc_pat, ' ', norm_query, flags=re.I)
+
+    # 2. Alarm IDs: e.g. A25, A99, A40, alarm a25, alarm 99
+    alarm_matches = re.findall(r'\b(?:alarm\s+)?a-?(\d{1,3})\b', rem_query)
+    for num_str in alarm_matches:
+        num = int(num_str)
+        canon_id = f"A{num}"
+        if canon_id not in known_entities:
+            if 1 <= num <= 34:
+                return {
+                    "status": "not_found",
+                    "unknown_id": canon_id,
+                    "id_type": "alarm",
+                    "answer": (
+                        f"cannot confirm alarm {canon_id}: AEG-AL-700 covers A17, A18, A19. "
+                        "AEG-AL-701 covers A01-A16 and A20-A34, which is not in the documentation package."
+                    ),
+                }
+            else:
+                return {
+                    "status": "not_found",
+                    "unknown_id": canon_id,
+                    "id_type": "alarm",
+                    "answer": (
+                        f"cannot confirm alarm {canon_id}: alarm {canon_id} is outside the documented ranges (A01-A34). "
+                        "AEG-AL-700 covers A17, A18, A19, and referenced companion document AEG-AL-701 covers A01-A16 and A20-A34 (not in package). "
+                        f"{canon_id} does not exist in any documented range."
+                    ),
+                }
+
+    # 3. Wiring / Terminal IDs: e.g. J-99, J-14, J-15
+    term_matches = re.findall(r'\bj-?(\d{1,3})\b', rem_query)
     for num in term_matches:
         cand = f"J-{num}"
         cand_alt = f"J{num}"
@@ -312,18 +363,43 @@ def check_unknown_ids(norm_query: str, known_entities: set) -> dict:
                 ),
             }
 
-    # 4. Document IDs: e.g. ECN-9999
-    doc_matches = re.findall(r'\b(ecn|aeg-[a-z]+)-?(\d{2,4})\b', norm_query)
-    for prefix, num in doc_matches:
-        cand = f"{prefix.upper()}-{num}"
-        if cand not in known_entities:
+    # 4. Generic Component / Device ID tokens: [A-Za-z]{1,5}-?\d{1,4}[A-Za-z]?
+    # Matches XV-99, PS-99, PLC-03, TB-7, KA1, etc.
+    generic_matches = re.findall(r'\b([A-Za-z]{1,5})-?(\d{1,4}[A-Za-z]?)\b', rem_query)
+    for prefix, suffix in generic_matches:
+        tok = f"{prefix}-{suffix}".lower()
+        tok_alt = f"{prefix}{suffix}".lower()
+
+        # Check ignored non-ID patterns (e.g. rev 3, v1, sec 4, page 1)
+        if any(re.match(p, tok, re.I) or re.match(p, tok_alt, re.I) for p in IGNORE_PATTERNS):
+            continue
+        # Also ignore if prefix is "a" (handled by alarm check) or "j" (handled by terminal check)
+        if prefix.lower() in ("a", "j"):
+            continue
+
+        # Check resolution against ALIAS_TABLE, known_entities, and KNOWN_DOCUMENTS
+        matched = False
+        for alias, ent, _ in ALIAS_TABLE:
+            if tok == alias.lower() or tok_alt == alias.lower() or tok.replace("-", "") == alias.lower().replace("-", ""):
+                matched = True
+                break
+        cand_upper = f"{prefix.upper()}-{suffix.upper()}"
+        cand_alt_upper = f"{prefix.upper()}{suffix.upper()}"
+        if cand_upper in known_entities or cand_alt_upper in known_entities:
+            matched = True
+        if cand_upper in KNOWN_DOCUMENTS or cand_alt_upper in KNOWN_DOCUMENTS:
+            matched = True
+
+        if not matched:
             return {
                 "status": "not_found",
-                "unknown_id": cand,
-                "id_type": "document",
+                "unknown_id": cand_upper,
+                "id_type": "component",
                 "answer": (
-                    f"cannot confirm document {cand}: File manifest covers ECN-1042 and ECN-1058. "
-                    f"{cand} was not found in the package."
+                    f"cannot confirm component {cand_upper}: not found in documentation package. "
+                    f"Checked component register (AEG-CR-700, which covers {reg_str}) and diagrams "
+                    "(AEG-DWG-E02 covers KA1; AEG-DWG-W03 covers TB-7, J-14). "
+                    f"{cand_upper} does not appear in any documentation in this package."
                 ),
             }
 

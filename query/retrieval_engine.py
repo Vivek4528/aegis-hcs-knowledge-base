@@ -52,7 +52,7 @@ def search(query: str, kb, version_hint: str = None) -> dict:
     # ── Entity existence rule: Unknown ID hallucination guard ───────────────
     from query.entity_resolver import check_unknown_ids, check_false_premise_properties
     known_subjects = set(kb.by_subject.keys())
-    unknown_id_res = check_unknown_ids(norm_q, known_subjects)
+    unknown_id_res = check_unknown_ids(norm_q, known_subjects, kb)
     if unknown_id_res:
         return {
             "query": query,
@@ -60,6 +60,8 @@ def search(query: str, kb, version_hint: str = None) -> dict:
             "recognized_entities": entities,
             "recognized_predicates": predicates,
             "status": "not_found",
+            "unknown_id": unknown_id_res["unknown_id"],
+            "id_type": unknown_id_res["id_type"],
             "answer": unknown_id_res["answer"],
             "claims_used": [],
             "evidence": [],
@@ -88,6 +90,9 @@ def search(query: str, kb, version_hint: str = None) -> dict:
             "recognized_entities": entities,
             "recognized_predicates": predicates,
             "status": "gap_false_premise",
+            "entity": false_premise_res["entity"],
+            "property": false_premise_res["property"],
+            "missing_predicate": false_premise_res["property"],
             "answer": false_premise_res["answer"],
             "claims_used": [],
             "evidence": [],
@@ -241,7 +246,7 @@ def search(query: str, kb, version_hint: str = None) -> dict:
     # ── Synthesise answer text ───────────────────────────────────────────────
     answer = _synthesize(
         status, top_claims, text_hits, entities, predicates,
-        version_history, norm_q,
+        version_history, norm_q, kb=kb,
         conflict_claims_for_entities=conflict_claims_for_entities,
     )
 
@@ -506,6 +511,7 @@ def _build_gaps(claims: list, entities: list, predicates: list, status: str) -> 
 def _synthesize(status: str, claims: list, text_hits: list,
                 entities: list, predicates: list,
                 version_history: list, norm_q: str,
+                kb=None,
                 conflict_claims_for_entities: list = None) -> str:
     """Produce a natural-language answer from retrieved claims."""
 
@@ -597,11 +603,17 @@ def _synthesize(status: str, claims: list, text_hits: list,
             "It is not adopted.\n\n" + answer
         )
 
-    if "a17" in norm_q and ("correct" in norm_q or "which document" in norm_q) and "ecn-1058" not in answer.lower():
-        answer += (
-            "\n\nECN-1058 is the engineering change notice that corrected the A17 alarm text "
-            "(clarifying 'whichever pressure sensor is active' without changing the 150 bar setpoint)."
-        )
+    # Generic document correction / supersession synthesis (applies to ANY entity):
+    if ("correct" in norm_q or "which document" in norm_q or "clarif" in norm_q) and entities and kb:
+        for ent in entities:
+            corr_claims = [
+                c for c in kb.claims.values()
+                if c["predicate"] in ("document_clarifies", "document_supersedes")
+                and (ent.lower() in c.get("value", "").lower() or c["subject"].lower() == ent.lower())
+            ]
+            for cc in corr_claims:
+                if cc["value"] not in answer:
+                    answer += f"\n\n{cc['value']}"
 
     return answer
 
